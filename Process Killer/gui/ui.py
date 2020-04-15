@@ -4,16 +4,23 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
-        self.pack()
-        self.create_widgets()
 
-    def create_widgets(self):
-        self.hi_there = tk.Button(self)
-        self.hi_there["text"] = "Hello World\n(click me)"
-        self.hi_there["command"] = self.say_hi
-        self.hi_there.pack(side="top")
-        self.quit = tk.Button(self, text="QUIT", fg="red",command=self.master.destroy)
-        self.quit.pack(side="bottom")
+    
 
-    def say_hi(self):
-        print("hi there, everyone!")
+
+def LaunchApp():
+
+    # Initialize a blank window
+    root = tk.Tk()
+    app = Application(master=root)
+
+    # Application title and Icon
+    root.iconbitmap("gui/img/app_icon.ico")
+    app.master.title("Application Killer")
+
+    # Set the max and min window size to 400x400
+    app.master.minsize(400,400)
+    app.master.maxsize(400,400)
+
+    # Keeps window 'alive'; without this the window instantly closes.
+    app.mainloop()
