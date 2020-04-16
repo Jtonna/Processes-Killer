@@ -39,9 +39,6 @@ def LaunchApp():
     scr_length = 420
     scr_width = 500
     root.geometry(f"{scr_length}x{scr_width}")
-    app.master.minsize(scr_length,scr_width)
-    app.master.maxsize(scr_length,scr_width)
-
 
     """Application layout, buttons, textboxes etc go here
     """
