@@ -6,15 +6,18 @@ class Application(tk.Frame):
         self.master = master
         self.pack() # Allows us to place diffrent "objects" (buttons and stuff) in diff locations
 
-    def create_button(self, button_text, button_location="bottom"):
+    def create_button(self, button_text, button_location="bottom", function_to_trigger=None):
         self.my_btn = tk.Button(self)
         self.my_btn["text"] = button_text
+        self.my_btn["command"] = function_to_trigger
         self.my_btn.pack(side=button_location)
 
     def create_text(self, the_text, text_location="bottom"):
         self.my_text = tk.Label(self)
         self.my_text["text"] = the_text
         self.my_text.pack(side=text_location)
+
+    #def create_input(self, )
 
 
 
@@ -28,9 +31,12 @@ def LaunchApp():
     root.iconbitmap("gui/img/app_icon.ico")
     app.master.title("Application Killer")
 
-    # Set the max and min window size to 400x400
-    app.master.minsize(400,400)
-    app.master.maxsize(400,400)
+    # Set the window size & max and min window size to 400x400
+    scr_length = 420
+    scr_width = 500
+    root.geometry(f"{scr_length}x{scr_width}")
+    app.master.minsize(scr_length,scr_width)
+    app.master.maxsize(scr_length,scr_width)
 
     """Application layout, buttons, textboxes etc go here
     """
@@ -40,3 +46,6 @@ def LaunchApp():
 
     # Keeps window 'alive'; without this the window instantly closes.
     app.mainloop()
+
+
+    
