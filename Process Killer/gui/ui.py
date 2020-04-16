@@ -6,10 +6,10 @@ class Application(tk.Frame):
         self.master = master
         self.pack() # Allows us to place diffrent "objects" (buttons and stuff) in diff locations
 
-    def create_button(self, button_text, button_location="bottom", function_to_trigger=None):
+    def create_button(self, button_text, button_location="bottom", function_to_run=None):
         self.my_btn = tk.Button(self)
         self.my_btn["text"] = button_text
-        self.my_btn["command"] = function_to_trigger
+        self.my_btn["command"] = function_to_run
         self.my_btn.pack(side=button_location)
 
     def create_text(self, the_text, text_location="bottom"):
@@ -19,7 +19,11 @@ class Application(tk.Frame):
 
     #def create_input(self, )
 
+def say_hi():
+    print("hi!!!!!!!!")
 
+def say_hello():
+    print("hello there.")
 
 def LaunchApp():
 
@@ -38,11 +42,13 @@ def LaunchApp():
     app.master.minsize(scr_length,scr_width)
     app.master.maxsize(scr_length,scr_width)
 
+
     """Application layout, buttons, textboxes etc go here
     """
     #app.display_text("Please enter the name of the program/s you would like to kill", "top")
     app.create_text("Type the name of the application/s you would like to kill", "top")
-    app.create_button("Kill Application's")
+    app.create_button("Say Hi", function_to_run=say_hi)
+    app.create_button("Say Hello", function_to_run=say_hello)
 
     # Keeps window 'alive'; without this the window instantly closes.
     app.mainloop()
