@@ -17,17 +17,16 @@ class Application(tk.Frame):
         self.my_text["text"] = the_text
         self.my_text.pack(side=text_location)
     
-    def create_input(self, input_location="bottom"):
+    def create_input(self):
         self.my_input = tk.Entry(self)
-        self.my_input.pack(side=input_location)
-
-    #def create_input(self, )
+        self.my_input.pack()
+    
+    def get_input(self):
+        textbox_content = self.my_input.get()
+        print(textbox_content)
 
 def say_hi():
     print("hi!!!!!!!!")
-
-def say_hello():
-    print("hello there.")
 
 def LaunchApp():
 
@@ -49,8 +48,9 @@ def LaunchApp():
     #app.display_text("Please enter the name of the program/s you would like to kill", "top")
     app.create_text("Type the name of the application/s you would like to kill", "top")
     app.create_button("Say Hi", function_to_run=say_hi)
-    app.create_button("Say Hello", function_to_run=say_hello)
     app.create_input()
+    app.create_button("Say Hello", function_to_run=app.get_input)
+
 
     # Keeps window 'alive'; without this the window instantly closes.
     app.mainloop()
