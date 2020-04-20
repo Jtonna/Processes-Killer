@@ -11,19 +11,23 @@ processes_shell = subprocess.Popen(cmd_command, shell=True, universal_newlines=T
 
 processes_scanned = 0
 
-def scanner:
+def scanner():
 
     """For each process in the subprocess.Popen() shell, we will
         1. filter out "Process Killer" and all possible varients of that name
         2. pass the string to a "string processor" that will get the Program Name & PID
     """
-    for process in processes_shell:
+    for process in processes_shell.stdout:
         processes_scanned =+ 1
 
-        # Filter OUT the process killer from the results
+        # Filter out process killer & varients from the results
         if "Process Killer" in process or "Process_Killer" in process:
             continue
-        
+
+        print(process)  
+
+
+scanner()
 
 
 
