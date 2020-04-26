@@ -32,7 +32,6 @@ def scanner():
         # print(f"***Passing a string: {len(process)}")
         string_processor(process)
 
-
 def string_processor(process):
     name_found = False
     name_list = []
@@ -115,4 +114,3 @@ def string_processor(process):
 
 scanner()
 
-    
