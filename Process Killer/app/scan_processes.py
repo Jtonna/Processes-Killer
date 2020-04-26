@@ -111,6 +111,3 @@ def string_processor(process):
     process_name = ''.join(name_list)
     process_id = ''.join(pid_list)
     print(f"name: {process_name}\npid: {process_id}\n\n")
-
-scanner()
-
