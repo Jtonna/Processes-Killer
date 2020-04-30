@@ -99,12 +99,12 @@ class DoublyLinkedList:
         elif node is self.head:
             self.head = self.head.next
             node.delete()
-          
+
         # Case: Node is tail
         elif node is self.tail:
             self.tail = self.tail.prev
             node.delete()
-
-
-        # if regular node (not head or tail)
-        node.delete()
+        
+        # Case: if regular node (not head or tail)
+        else:
+            node.delete()
