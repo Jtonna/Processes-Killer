@@ -1,4 +1,4 @@
-from doubly_linked_list import DoublyLinkedList
+from dll_queue.doubly_linked_list import DoublyLinkedList
 
 #  A queue is first in -> first out.
 

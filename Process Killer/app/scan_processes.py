@@ -2,6 +2,7 @@
 """
 
 import subprocess
+from dll_queue.queue import Queue
 
 # Returns a "list" of running processes in a Command Prompt shell on Windows, parsable by subprocess.Popen()
 cmd_command = "WMIC PROCESS GET caption, commandline, processid"
@@ -9,7 +10,11 @@ cmd_command = "WMIC PROCESS GET caption, commandline, processid"
 # Runs the cmd command, and allows data to be parsed
 processes_shell = subprocess.Popen(cmd_command, shell=True, universal_newlines=True, stdout=subprocess.PIPE)
 
+# Keeps track of total number of process strings scanned
 processes_scanned = 0
+
+# creates a Queue named q
+q = Queue()
 
 def scanner():
 
@@ -110,4 +115,10 @@ def string_processor(process):
     # Convert the list's to strings
     process_name = ''.join(name_list)
     process_id = ''.join(pid_list)
-    print(f"name: {process_name}\npid: {process_id}\n\n")
+    bucket = {process_name:process_id}
+    
+    # Pass the data to a queue
+    q.enqueue(bucket)
+    print(q.len())
+
+scanner()
