@@ -53,14 +53,12 @@ class DoublyLinkedList:
         if not self.head and not self.tail:
             self.head = new_node
             self.tail = new_node
-        # If there is something on the head of the DLL, we need to insert the new_node at the beginning & re-assignt he original head to next
+        # If there is something on the head of the DLL, we need to insert the new_node at the beginning & re-assign the original head to the new node
         else:
             new_node.next = self.head
             self.head.prev = new_node
             self.head = new_node
             
-
-
     """ Removes the DoublyLinkedLists current head node
         this in turn makes the 'next' node the new head of the list"""
     def remove_from_head(self):
@@ -68,10 +66,45 @@ class DoublyLinkedList:
 
     """ """
     def add_to_tail(self, value):
-        pass
+        new_node = ListNode(value)
+        self.length += 1
+
+        # If we dont have a head or a tail we need to create the start of the DLL
+        if not self.head and not self.tail:
+            self.head = new_node
+            self.tail = new_node
+        # If there is something on the tail of the DLL, we need to insert the new_node at the end & re-assign the original tail to the new node
+        else:
+            new_node.prev = self.tail
+            self.tail.next = new_node
+            self.tail = new_node
 
     """ """
     def remove_from_tail(self):
         pass
 
-    
+    """ Removes a node from the list
+        also handles cases where the node was the head or tail"""
+    def delete(self, node):
+        self.length -= 1
+
+        # TODO: catch errors if list is empty or node is not in list
+        
+        # Case: Head is the Tail (one node in the list)
+        if self.head is self.tail:
+            self.tail = None
+            self.head = None
+        
+        # Case: Node is the head
+        elif node is self.head:
+            self.head = self.head.next
+            node.delete()
+          
+        # Case: Node is tail
+        elif node is self.tail:
+            self.tail = self.tail.prev
+            node.delete()
+
+
+        # if regular node (not head or tail)
+        node.delete()
