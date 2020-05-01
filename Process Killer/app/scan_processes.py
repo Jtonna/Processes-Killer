@@ -1,8 +1,7 @@
 """ Scan's running processes, Filters information and then passes the resulting data into a DLL Queue
 """
-
 import subprocess
-from dll_queue.queue import Queue
+from .dll_queue.queue import Queue
 
 # Returns a "list" of running processes in a Command Prompt shell on Windows, parsable by subprocess.Popen()
 cmd_command = "WMIC PROCESS GET caption, commandline, processid"

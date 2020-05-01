@@ -1,5 +1,6 @@
 import tkinter as tk
-from app.app_state import AppState
+from .app_state import AppState
+from .scan_processes import scanner
 
 # Title, Icon, Window size (Width x Length)
 title = "Process Killer"
@@ -7,7 +8,7 @@ icon_path = ""
 window_size = "320x480"
 
 # Create "Application State"
-sstate = AppState()
+state = AppState()
 
 class ProcessKillerApp(tk.Frame):
     def __init__(self, master=None):
@@ -46,14 +47,15 @@ class ProcessKillerApp(tk.Frame):
         self.current_activity.pack()
         self.killed_information.pack()
     
-    # TODO: Set process name to state & trigger scanner
     """ Triggered by the 'submit_process_information' button
         It sets the process name in app/state_info.
         Triggers the scanner function.
         While the scanner passes data to the Queue, processes with the name in state will be killed"""
     def get_process_to_kill(self):
         process_name = self.process_name_to_kill.get().lower()
-        sstate.set_name(process_name)
+        state.set_name(process_name)
+        scanner()
+
         
 
 # Instantiate the Window & Application GUI

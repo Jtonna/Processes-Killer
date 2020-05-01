@@ -1,4 +1,5 @@
 import warnings
+
 class AppState:
     def __init__(self):
         self.application_name = None
