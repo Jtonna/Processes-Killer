@@ -118,5 +118,6 @@ def string_processor(process):
     bucket = {process_name:process_id}
     
     # Pass the data to a queue
+    # TODO: Implement the Queue in state.py, so it can easily be reset when needed.
     q.enqueue(bucket)
     print(q.len())
