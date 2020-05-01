@@ -120,5 +120,3 @@ def string_processor(process):
     # Pass the data to a queue
     q.enqueue(bucket)
     print(q.len())
-
-scanner()
