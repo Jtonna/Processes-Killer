@@ -52,7 +52,7 @@ class ProcessKillerApp(tk.Frame):
         Triggers the scanner function.
         While the scanner passes data to the Queue, processes with the name in state will be killed"""
     def get_process_to_kill(self):
-        process_name = self.process_name_to_kill.get()
+        process_name = self.process_name_to_kill.get().lower()
         sstate.set_name(process_name)
         
 

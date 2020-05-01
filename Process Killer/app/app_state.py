@@ -9,17 +9,19 @@ class AppState:
 
     """ Allows us to set the application name we want to kill """
     def set_name(self, application_name=None, processes_scanned=0):   
-        print(f"incoming name: {application_name}\n")    
+        print(f"\n\n*****\nIncoming name: {application_name}, Previous name: {self.application_name}\n")
+        print(f"{application_name == self.application_name}")           
         # Case: User double clicked the kill button
-        if self.application_name is application_name:
-            print("\nSameNameWarning @app_state.py:\n   Incoming name is the same as name in state")
+        if self.application_name == application_name:
+            print("\nNameWarning @app_state.py:\n   Incoming name is the same as name in state")
             pass
         # Case: Trying to kill a new application
-        elif self.application_name is not None:
+        elif self.application_name != None:
             # TODO: The user May be trying to kill another application, we need to handle this somewhere else
-            print(f"\nFutureWarning @app_state.py:\n    Error attempting to kill another application: '{application_name}', please close and re-open the application")
+            print(f"\nNameWarning @app_state.py:\n    Error attempting to kill another application: '{application_name}', please close and re-open the application")
         # Case: There is no name set, so we set one
         else:
+            print("\nNameWarning @app_state.py:\n   Setting application name for the first name")
             self.application_name = application_name
         
     """ Increments processes_scanned by 1 everytime it gets called """
