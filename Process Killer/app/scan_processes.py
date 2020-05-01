@@ -117,9 +117,4 @@ def string_processor(process):
     process_id = ''.join(pid_list)
     bucket = {process_name:process_id}
     
-    # Pass the data to a queue
-    # TODO: Implement the Queue in state.py, so it can easily be reset when needed.
-    #q.enqueue(bucket)
     state.add_to_queue(bucket)
-    print(state.len_of_queue())
-
