@@ -8,14 +8,16 @@ class AppState:
         # self.processes_failed = processes_failed
 
     """ Allows us to set the application name we want to kill """
-    def set_name(self, application_name=None, processes_scanned=0):       
+    def set_name(self, application_name=None, processes_scanned=0):   
+        print(f"incoming name: {application_name}\n")    
         # Case: User double clicked the kill button
         if self.application_name is application_name:
+            print("\nSameNameWarning @app_state.py:\n   Incoming name is the same as name in state")
             pass
         # Case: Trying to kill a new application
         elif self.application_name is not None:
             # TODO: The user May be trying to kill another application, we need to handle this somewhere else
-            warnings.warn(f"Error attempting to kill another application: '{application_name}', please close and re-open the application", FutureWarning)
+            print(f"\nFutureWarning @app_state.py:\n    Error attempting to kill another application: '{application_name}', please close and re-open the application")
         # Case: There is no name set, so we set one
         else:
             self.application_name = application_name
@@ -35,19 +37,19 @@ class AppState:
             # self.processes_failed
         )
 
-s = AppState()
-s.get_state()
+# s = AppState()
+# s.get_state()
 
-s.set_name(application_name="Adobe")
-s.set_process_scanned()
-s.set_process_scanned()
-s.set_process_scanned()
-s.set_process_scanned()
-s.get_state()
+# s.set_name(application_name="Adobe")
+# s.set_process_scanned()
+# s.set_process_scanned()
+# s.set_process_scanned()
+# s.set_process_scanned()
+# s.get_state()
 
-s.set_name(application_name="Slack")
-s.set_process_scanned()
-s.set_process_scanned()
-s.set_process_scanned()
-s.set_process_scanned() 
-s.get_state()
+# s.set_name(application_name="Slack")
+# s.set_process_scanned()
+# s.set_process_scanned()
+# s.set_process_scanned()
+# s.set_process_scanned() 
+# s.get_state()
