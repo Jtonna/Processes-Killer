@@ -1,4 +1,4 @@
-from dll_queue.doubly_linked_list import DoublyLinkedList
+from .doubly_linked_list import DoublyLinkedList
 
 #  A queue is first in -> first out.
 
@@ -12,9 +12,13 @@ class Queue:
 
         # Case: Storage head is None
         if self.storage.head is None:
+            # TODO: Logger for enqueue @ head
+            print(f"     adding '{value}' to head")
             self.storage.add_to_head(value)
         # Case: The head is not None
         else:
+            # TODO: Logger for enqueue @ tail
+            print(f"     adding '{value}' to tail")
             self.storage.add_to_tail(value)
 
     def dequeue(self):
@@ -27,6 +31,9 @@ class Queue:
             #  We need to store the value elsewhere to prevent it from being modified by +1 so we can return it later
             head_true_value = self.storage.head.value
             self.storage.remove_from_head()
+
+            # TODO: Logger for dequeue
+            print(f"     removing '{head_true_value}' from head")
             return head_true_value
 
     def len(self):
