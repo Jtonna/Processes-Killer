@@ -2,6 +2,7 @@
 """
 import subprocess
 from .dll_queue.queue import Queue
+from .app_state import state
 
 # Returns a "list" of running processes in a Command Prompt shell on Windows, parsable by subprocess.Popen()
 cmd_command = "WMIC PROCESS GET caption, commandline, processid"
@@ -118,5 +119,7 @@ def string_processor(process):
     
     # Pass the data to a queue
     # TODO: Implement the Queue in state.py, so it can easily be reset when needed.
-    q.enqueue(bucket)
-    print(q.len())
+    #q.enqueue(bucket)
+    state.add_to_queue(bucket)
+    print(state.len_of_queue())
+

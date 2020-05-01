@@ -1,14 +1,12 @@
 import tkinter as tk
-from .app_state import AppState
+
+from .app_state import state
 from .scan_processes import scanner
 
 # Title, Icon, Window size (Width x Length)
 title = "Process Killer"
 icon_path = ""
 window_size = "320x480"
-
-# Create "Application State"
-state = AppState()
 
 class ProcessKillerApp(tk.Frame):
     def __init__(self, master=None):
