@@ -5,26 +5,28 @@ class AppState:
     def __init__(self):
         self.application_name = None
         self.processes_scanned_count = 0
-        # self.relevant_processes = relevant_processes
-        # self.processes_killed = processes_killed
-        # self.processes_failed = processes_failed
         self.q = Queue()
 
-    """ Allows us to set the application name we want to kill """
+    """ Allows us to set the application name the user wants to kill """
     def set_name(self, application_name=None, processes_scanned=0):   
         # TODO: Setup logger for all the print statements below
-        print(f"\n\n*****\nIncoming name: {application_name}, Previous name: {self.application_name}\n")        
+
+
+        # print(f"\n\n*****\nIncoming name: {application_name}, Previous name: {self.application_name}\n")        
         # Case: User double clicked the kill button
         if self.application_name == application_name:
-            print("\nNameWarning @app_state.py:\n   Incoming name is the same as name in state")
+            # print("\nNameWarning @app_state.py:\n   Incoming name is the same as name in state")
             pass
-        # Case: Trying to kill a new application
+
+        # TODO: Implement _reset_state when the user enters a new application name
+        # Case: Trying to kill an application with a different name
         elif self.application_name != None:
             # TODO: The user May be trying to kill another application, we need to handle this somewhere else
             print(f"\nNameWarning @app_state.py:\n    Error attempting to kill another application: '{application_name}', please close and re-open the application")
+
         # Case: There is no name set, so we set one
         else:
-            print("\nNameWarning @app_state.py:\n   Setting application name for the first name")
+            # print("\nNameWarning @app_state.py:\n   Setting application name for the first name")
             self.application_name = application_name
     
     """ Returns the application name for evaluation in the process string """
@@ -34,31 +36,24 @@ class AppState:
     """ Increments processes_scanned by 1 everytime it gets called """
     def increment_process_scanned_count(self):
         self.processes_scanned_count = self.processes_scanned_count + 1
-
-    """ Returns the application state """
-    def get_state(self):
-        print(
-            self.application_name, 
-            self.processes_scanned_count
-            # self.relevant_processes,
-            # self.processes_killed,
-            # self.processes_failed
-        )
     
-    """ Easier access to enqueueing since most modules will have access
-        to app_state; i did this because im tired of random import issues """
+    """ Using the Queue 'q', we are able to easily add a 'bucket' of data to end of the queue """
     def add_to_queue(self, value):
         self.processes_scanned_count = self.processes_scanned_count+1
         self.q.enqueue(value)
     
-    """ Easier access to dequeueing since most modules will have access
-        to app_state; i did this because im tired of random import issues """
+    """ Using the Queue 'q', we are able to Remove & Return the first item from the queue """
     def remove_from_queue(self):
         return self.q.dequeue()
 
-    """ Returns the length of the queue """
+    """ Using the Queue 'q', we can monitor the length of the q; ie how many 'buckets' there are """
     def len_of_queue(self):
         return self.q.len()
+   
+    """ Returns the application state for debugging"""
+    def get_state(self):
+        # print( self.application_name, self.processes_scanned_count )
+        pass
 
     """ This completely wipes and resets the state,
         this is useful for when the user wants to kill more than one application"""
@@ -66,31 +61,5 @@ class AppState:
         # TODO: Implement _reset_state
         pass
 
-
-
-# Creates the state object
+# Creates the state object so it can be accesses from anywhere in the application
 state = AppState()
-
-# s = AppState()
-
-# s.get_state()
-
-# s.set_name(application_name="Adobe")
-# s.set_process_scanned()
-# s.set_process_scanned()
-# s.set_process_scanned()
-# s.set_process_scanned()
-# s.get_state()
-
-# s.set_name(application_name="Slack")
-# s.set_process_scanned()
-# s.set_process_scanned()
-# s.set_process_scanned()
-# s.set_process_scanned() 
-# s.get_state()
-
-# s.add_to_queue(43)
-# s.add_to_queue(433)
-# s.add_to_queue(2353)
-
-# s.remove_from_queue()
