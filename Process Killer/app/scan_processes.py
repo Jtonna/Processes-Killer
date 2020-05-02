@@ -117,6 +117,9 @@ def string_processor(process):
     # Convert the list's to strings
     process_name = ''.join(name_list)
     process_id = ''.join(pid_list)
-    bucket = {process_name:process_id}
+    bucket = {
+        'name': process_name,
+        'pid': process_id
+    }
     
     state.add_to_queue(bucket)
