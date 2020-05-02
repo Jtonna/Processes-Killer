@@ -1,14 +1,10 @@
 """ Scan's running processes, Filters information and then passes the resulting data into a DLL Queue
 """
 import subprocess
-import operator
 from .app_state import state
 
 # Returns a "list" of running processes in a Command Prompt shell on Windows, parsable by subprocess.Popen()
 cmd_command = "WMIC PROCESS GET caption, commandline, processid"
-
-# Runs the cmd command, and allows data to be parsed
-processes_shell = subprocess.Popen(cmd_command, shell=True, universal_newlines=True, stdout=subprocess.PIPE)
 
 """ Scans the windows system for running processes
     compares each process running to see if the application_name from state can be found
@@ -17,22 +13,25 @@ def scanner():
     print("\nScanner Started\n")
     state.increment_process_scanned_count()
 
-    """For each process in the subprocess.Popen() shell, we will
-        1. filter out "Process Killer" and all possible varients of that name
-        2. pass the string to a "string processor" that will get the Program Name & PID
-        3. pass the returned data to the Queue
-    """
-    for process in processes_shell.stdout:
-        lowercase_process_str = process.lower()
+    # TODO: Define what the fuck that script from the 1 hour long bug hunt does to solve the Popen issue.
+    """ IDK WHAT THIS DOES"""
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    processes = subprocess.Popen(cmd_command, startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+       
+    for process in processes.stdout:
+        lowercase_process_str = process.decode('utf-8').lower()
         name_in_state = state.get_name()
         state.increment_process_scanned_count() # Helps keep track of the number of processes scanned
+
+        # print(lowercase_process_str)
 
         if len(process.strip()) is 0:
             pass
 
         # If the application name the user entered is found as a sub-string in the process sting pass it to the string_processor
         if name_in_state in lowercase_process_str:
-            string_processor(process)
+            string_processor(process.decode('utf-8'))
 
 
     print("\nScanner Ended\n")
