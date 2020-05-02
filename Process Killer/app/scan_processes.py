@@ -19,8 +19,9 @@ from .app_state import state
 """ Scans the windows system for running processes
     compares each process running to see if the application_name from state can be found
     if it is found, we pass it to string_processor """
+
+# TODO: Implement a form of logging
 def scanner():
-    print("\nScanner Started\n")
     state.increment_process_scanned_count()
 
     """ On windows a 'subprocess' command will cause a Command Prompt window to open
@@ -56,18 +57,17 @@ def scanner():
         if name_in_state in lowercase_process_str:
             string_processor(process.decode('utf-8'))
 
-
-    print("\nScanner Ended\n")
-
 """ Formats given 'process' string to extract a process name and process id
     passes that info as a dictionary to a Queue """
 def string_processor(process):
+
+    # Variables for keeping track of the process name & id statuses
     name_found = False
     name_list = []
     pid_found = False
     pid_list = []
 
-    # traverse the string from the beginning for Name
+    # traverse the string from the beginning for to find the Process Name
     if name_found is False:
         for i in range(len(process)):
 
@@ -81,13 +81,20 @@ def string_processor(process):
             
     # traverse the string from the end for pid
     if pid_found is False:
+
+         # This is the process ID but backwards, since we are looping backwards
         temp_list = []
+
+        # Used for helping keep track of when the process id is found
         fail_safe = 0
+
         for i in range(len(process)):
 
-            index = ((len(process) - 1) - i) # End of the string's length, then -1 everytime we loop
+            # End of the string's length, then -1 everytime we loop
+            index = ((len(process) - 1) - i)
 
-            # If the current index is a space & the next index is a space we continue
+            """ If the current index is a space & the next index is a space we start the next loop
+                this is how we know we are still at the end of the string & havent started finding the process id yet """
             if process[index] == ' ':
                 if process[index-1] == ' ':
                     continue
@@ -112,8 +119,7 @@ def string_processor(process):
                 when we get another value error and the fail_safe is set to 1
                     we set the fail_safe equal to 2
                     mark the pid as found
-                    break the loop since we are done
-            """
+                    break the loop since we are done """
             try:
                 int(process[index])
                 if fail_safe is 1:
@@ -132,6 +138,7 @@ def string_processor(process):
                         
         # Loop over the temp list and basically reverse it for pid_list
         for i in range(len(temp_list)):
+
             # Pop the last item and add it to pid list
             last_item = temp_list.pop(len(temp_list)-1)
             pid_list.append(last_item)
@@ -144,4 +151,5 @@ def string_processor(process):
         'pid': process_id
     }
     
+    # Add the bucket to the states queue
     state.add_to_queue(bucket)
