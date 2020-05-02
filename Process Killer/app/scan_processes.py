@@ -1,7 +1,6 @@
 """ Scan's running processes, Filters information and then passes the resulting data into a DLL Queue
 """
 import subprocess
-from .dll_queue.queue import Queue
 from .app_state import state
 
 # Returns a "list" of running processes in a Command Prompt shell on Windows, parsable by subprocess.Popen()
@@ -10,13 +9,8 @@ cmd_command = "WMIC PROCESS GET caption, commandline, processid"
 # Runs the cmd command, and allows data to be parsed
 processes_shell = subprocess.Popen(cmd_command, shell=True, universal_newlines=True, stdout=subprocess.PIPE)
 
-# Keeps track of total number of process strings scanned
-processes_scanned = 0
-
-# creates a Queue named q
-q = Queue()
-
 def scanner():
+    state.increment_process_scanned_count()
 
     """For each process in the subprocess.Popen() shell, we will
         1. filter out "Process Killer" and all possible varients of that name
@@ -24,18 +18,22 @@ def scanner():
         3. pass the returned data to the Queue
     """
     for process in processes_shell.stdout:
-        processes_scanned =+ 1
+        state.increment_process_scanned_count() # Helps keep track of processes scanned
 
-        # Filter out new lines that are basically empty strings
-        if len(process) < 2:
-            continue
+        # Filter out "newlines" that have no characters
+        vowels = ['a', 'e', 'i', 'o', 'u', 'y']
+        for letter in vowels:
+            if letter not in process:
+                pass
 
         # Filter out process killer & varients from the results
         if "Process Killer" in process or "Process_Killer" in process:
             continue
         
-        # print(f"***Passing a string: {len(process)}")
-        string_processor(process)
+        # If the string contains the name from state.application_name pass it to the string processor
+        if state.get_name() in str(process):
+            print(process)
+            string_processor(process)
 
 def string_processor(process):
     name_found = False
