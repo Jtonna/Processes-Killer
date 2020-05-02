@@ -2,6 +2,7 @@ import tkinter as tk
 
 from .app_state import state
 from .scan_processes import scanner
+from .kill_from_queue import killer
 
 # Title, Icon, Window size (Width x Length)
 title = "Process Killer"
@@ -53,6 +54,7 @@ class ProcessKillerApp(tk.Frame):
         process_name = self.process_name_to_kill.get().lower()
         state.set_name(process_name)
         scanner()
+        killer()
 
         
 

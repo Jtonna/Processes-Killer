@@ -1,7 +1,7 @@
 """ Scan's running processes, Filters information and then passes the resulting data into a DLL Queue
 """
 import subprocess
-from .dll_queue.queue import Queue
+import operator
 from .app_state import state
 
 # Returns a "list" of running processes in a Command Prompt shell on Windows, parsable by subprocess.Popen()
@@ -10,13 +10,12 @@ cmd_command = "WMIC PROCESS GET caption, commandline, processid"
 # Runs the cmd command, and allows data to be parsed
 processes_shell = subprocess.Popen(cmd_command, shell=True, universal_newlines=True, stdout=subprocess.PIPE)
 
-# Keeps track of total number of process strings scanned
-processes_scanned = 0
-
-# creates a Queue named q
-q = Queue()
-
+""" Scans the windows system for running processes
+    compares each process running to see if the application_name from state can be found
+    if it is found, we pass it to string_processor """
 def scanner():
+    print("\nScanner Started\n")
+    state.increment_process_scanned_count()
 
     """For each process in the subprocess.Popen() shell, we will
         1. filter out "Process Killer" and all possible varients of that name
@@ -24,19 +23,22 @@ def scanner():
         3. pass the returned data to the Queue
     """
     for process in processes_shell.stdout:
-        processes_scanned =+ 1
+        lowercase_process_str = process.lower()
+        name_in_state = state.get_name()
+        state.increment_process_scanned_count() # Helps keep track of the number of processes scanned
 
-        # Filter out new lines that are basically empty strings
-        if len(process) < 2:
-            continue
+        if len(process.strip()) is 0:
+            pass
 
-        # Filter out process killer & varients from the results
-        if "Process Killer" in process or "Process_Killer" in process:
-            continue
-        
-        # print(f"***Passing a string: {len(process)}")
-        string_processor(process)
+        # If the application name the user entered is found as a sub-string in the process sting pass it to the string_processor
+        if name_in_state in lowercase_process_str:
+            string_processor(process)
 
+
+    print("\nScanner Ended\n")
+
+""" Formats given 'process' string to extract a process name and process id
+    passes that info as a dictionary to a Queue """
 def string_processor(process):
     name_found = False
     name_list = []
@@ -115,6 +117,9 @@ def string_processor(process):
     # Convert the list's to strings
     process_name = ''.join(name_list)
     process_id = ''.join(pid_list)
-    bucket = {process_name:process_id}
+    bucket = {
+        'name': process_name,
+        'pid': process_id
+    }
     
     state.add_to_queue(bucket)
