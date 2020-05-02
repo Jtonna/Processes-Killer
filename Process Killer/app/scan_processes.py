@@ -16,9 +16,6 @@
 import subprocess
 from .app_state import state
 
-# Returns a "list" of running processes in a Command Prompt shell on Windows, parsable by subprocess.Popen()
-cmd_command = "WMIC PROCESS GET caption, commandline, processid"
-
 """ Scans the windows system for running processes
     compares each process running to see if the application_name from state can be found
     if it is found, we pass it to string_processor """
@@ -26,19 +23,32 @@ def scanner():
     print("\nScanner Started\n")
     state.increment_process_scanned_count()
 
-    # TODO: Define what the fuck that script from the 1 hour long bug hunt does to solve the Popen issue.
-    """ IDK WHAT THIS DOES"""
+    """ On windows a 'subprocess' command will cause a Command Prompt window to open
+        since we are compiling the appliction with pyinstaller using the '--noconsole' command
+        the application fails to launch.
+        
+        STARTF_USESHOWWINDOW prevents a window from poping up behind Tkinter, and also solves the bug described above.
+        For more information on how this works please see the link below.
+        https://github.com/pyinstaller/pyinstaller/wiki/Recipe-subprocess """
     startupinfo = subprocess.STARTUPINFO()
     startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+    # Returns a "list" of running processes in a Command Prompt shell on Windows, parsable by subprocess.Popen()
+    cmd_command = "WMIC PROCESS GET caption, commandline, processid"
+
+    # Create a Command Prompt Window, run the cmd_command, disable a window popup, and allow information to be output with any of the following PIPE's
     processes = subprocess.Popen(cmd_command, startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-       
+    
+    # stdout allows us to parse each individual process running.
     for process in processes.stdout:
+
+        """ Each output is encoded, so we need to decode it and convert it to lowercase
+            we also get the name of the applicationw we want from state so we only parse strings that contain that name """
         lowercase_process_str = process.decode('utf-8').lower()
         name_in_state = state.get_name()
-        state.increment_process_scanned_count() # Helps keep track of the number of processes scanned
+        state.increment_process_scanned_count()
 
-        # print(lowercase_process_str)
-
+        # Sometimes there are lines completely made of spaces and nothing more, so we pass if the line length is 0 after removing the spaces.
         if len(process.strip()) is 0:
             pass
 
