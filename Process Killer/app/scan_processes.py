@@ -1,5 +1,18 @@
-""" Scan's running processes, Filters information and then passes the resulting data into a DLL Queue
-"""
+""" This script scan's running processes on a WINDOWS machine, then filters the data and passes it to a Queue
+    scanner()
+        - Scans the running processes
+        - Each process is a process string
+        -   for each process we pass it to the string processor
+
+    string_processor(process)
+        - Takes in an individual process string of an UNKNOWN length
+        - Captures and sets the process name from the string by looping from the beginning of the string
+        - Captures and sets the process id from the string by looping backwards
+            - reverses the backwards process id
+        
+        - Creates a dict (bucket) and passes it to the state's queue
+    """
+
 import subprocess
 from .app_state import state
 
