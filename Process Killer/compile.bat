@@ -1,0 +1,1 @@
+pyinstaller.exe --onefile --noconsole -n="Process Killer" main.py
