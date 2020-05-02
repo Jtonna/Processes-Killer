@@ -4,12 +4,13 @@ import subprocess
 from .app_state import state
 
 # Returns a "list" of running processes in a Command Prompt shell on Windows, parsable by subprocess.Popen()
-cmd_command = "WMIC PROCESS GET caption, commandline, processid"
+cmd_command = "WMIC PROCESS GET caption"
 
 # Runs the cmd command, and allows data to be parsed
 processes_shell = subprocess.Popen(cmd_command, shell=True, universal_newlines=True, stdout=subprocess.PIPE)
 
 def scanner():
+    print("\nScanner Started\n")
     state.increment_process_scanned_count()
 
     """For each process in the subprocess.Popen() shell, we will
@@ -26,15 +27,18 @@ def scanner():
             if letter not in process:
                 pass
 
+        
         # Filter out process killer & varients from the results
         if "Process Killer" in process or "Process_Killer" in process:
             continue
         
         # If the string contains the name from state.application_name pass it to the string processor
-        if state.get_name() in str(process):
+        name_in_state = state.get_name()
+        if name_in_state in process.lower():
             print(process)
             string_processor(process)
 
+    print("\nScanner Ended\n")
 def string_processor(process):
     name_found = False
     name_list = []
