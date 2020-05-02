@@ -4,13 +4,6 @@ from .app_state import state
 from .scan_processes import scanner
 from .kill_from_queue import killer
 
-# Title, Icon, Window size (Width x Length)
-title = "Process Killer"
-icon_path = "app/img/app_icon.ico"
-window_width = 320
-window_height = 480
-window_size = str(window_width)+"x"+str(window_height)
-
 class ProcessKillerApp(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
@@ -57,9 +50,15 @@ class ProcessKillerApp(tk.Frame):
         state.set_name(process_name)
         scanner()
         killer()
-
-        
+    
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
+
+# Title, Icon, Window size (Width x Length)
+title = "Process Killer"
+icon_path = "app/img/app_icon.ico"
+window_width = 320
+window_height = 480
+window_size = str(window_width)+"x"+str(window_height)
 
 # Create a blank 0x0px window
 root = tk.Tk()
@@ -68,6 +67,8 @@ root = tk.Tk()
 root.iconbitmap(icon_path)
 root.title(title)
 root.geometry(window_size)
+root.minsize(window_width, window_height)
+root.maxsize(window_width, window_height)
 
 # Instansiate the widgets and place them
 app = ProcessKillerApp(master=root)
