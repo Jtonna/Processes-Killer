@@ -1,6 +1,7 @@
 import sys, os
 import random
 import tkinter as tk
+import time
 
 from .app_state import state
 from .scan_processes import scanner
@@ -31,9 +32,9 @@ class ProcessKillerApp(tk.Frame):
         self.submit_process_name["command"] = self.start_killing_processes
 
         # Give the user a status update
-        self.current_activity_text = tk.StringVar()
-        self.current_activity = tk.Label()
-        self.current_activity["textvariable"] = self.current_activity_text
+        self.current_action_text = tk.StringVar()
+        self.current_action = tk.Label()
+        self.current_action["textvariable"] = self.current_action_text
 
         # Display stats to the user about how many processes were found that were relevant and how many were killed
         self.scan_counter_text = tk.StringVar()
@@ -45,39 +46,60 @@ class ProcessKillerApp(tk.Frame):
         self.instruction_label.pack()
         self.process_name_to_kill.pack()
         self.submit_process_name.pack()
-        self.current_activity.pack()
+        self.current_action.pack()
         self.scan_counter.pack()
     
     def updateWidgets(self):
-        print("loop")
+        print("Updating Widgets")
+
+        # Update current action
+        activity = f"{state.get_current_action()}..."
+        self.current_action_text.set(activity)
 
         # Update process scan counter
         scan_counter = f"{state.get_processes_scanned_count()} processes scanned"
         self.scan_counter_text.set(scan_counter)
-
-        # Recursion to keep these updating
-        self.master.after(200, self.updateWidgets)
     
+    def forceUpdate(self):
+        """ Triggers a widget update, then forces an update of idle tasks (ie like a widget update)
+            this allows us to tell the user whats happening in the application at any given moment"""
+        print("Forced update")
+        self.updateWidgets()
+        self.master.update_idletasks()
+
     def start_killing_processes(self):
         """ Triggered by the 'submit_process_information' button
             It sets the process name in app/state_info.
             Triggers the scanner function.
-            While the scanner passes data to the Queue, processes with the name in state will be killed"""
+            Triggers killer function"""
 
         # Gets the process name from the textbox in all lowercase
         process_name = self.process_name_to_kill.get().lower()
 
         # Sets the name in the application state
         state.set_name(process_name)
-        print("start_killing_processes")
+        print("starting application scripts")
 
         # Triggers the scanner function through state # while loop for killer
         if state.get_has_scanned() is False:
-            print("calling scanner")
+            
+            # Updates state for the user, update's widgets, calls scanner, updates idle tasks
+            print("setting state and calling scanner")
+            state.set_current_action("Scanning for processes")
+            self.forceUpdate()
+            print(state.get_current_action())
             scanner()
-            self.master.update_idletasks()
-            print("scanner finished, calling killer")
+
+            self.forceUpdate()            
+            
+            # Updates current_action
+            print("setting state and calling killer")
+            state.set_current_action("Killing processes from queue")
+            self.forceUpdate()
+            
             killer()
+            self.forceUpdate()
+            
 
     
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
