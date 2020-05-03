@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 import random
 import tkinter as tk
 import time
@@ -7,17 +8,17 @@ from .app_state import state
 from .scan_processes import scanner
 from .kill_from_queue import killer
 
+
 class ProcessKillerApp(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.pack()
-        self.createWidgets()
-        self.placeWidgets()
-        self.updateWidgets()
+        self.create_widgets()
+        self.place_widgets()
+        self.update_widgets()
 
-    def createWidgets(self):
+    def create_widgets(self):
         """ Design's the widgets that will beused in the GUI """
-
 
         # Label for instructing user what the hell to do
         self.instruction_label = tk.Label()
@@ -38,18 +39,18 @@ class ProcessKillerApp(tk.Frame):
 
         # Display stats to the user about how many processes were found that were relevant and how many were killed
         self.scan_counter_text = tk.StringVar()
-        self.scan_counter = tk.Label()        
+        self.scan_counter = tk.Label()
         self.scan_counter["textvariable"] = self.scan_counter_text
 
-    def placeWidgets(self):
+    def place_widgets(self):
         """ Places widgets in order on the GUI window"""
         self.instruction_label.pack()
         self.process_name_to_kill.pack()
         self.submit_process_name.pack()
         self.current_action.pack()
         self.scan_counter.pack()
-    
-    def updateWidgets(self):
+
+    def update_widgets(self):
         print("Updating Widgets")
 
         # Update current action
@@ -59,12 +60,12 @@ class ProcessKillerApp(tk.Frame):
         # Update process scan counter
         scan_counter = f"{state.get_processes_scanned_count()} processes scanned"
         self.scan_counter_text.set(scan_counter)
-    
-    def forceUpdate(self):
+
+    def force_update(self):
         """ Triggers a widget update, then forces an update of idle tasks (ie like a widget update)
             this allows us to tell the user whats happening in the application at any given moment"""
         print("Forced update")
-        self.updateWidgets()
+        self.update_widgets()
         self.master.update_idletasks()
 
     def onClick_submit_process(self):
@@ -80,26 +81,25 @@ class ProcessKillerApp(tk.Frame):
         state.set_name(process_name)
         print("starting application scripts")
 
-      
         # Updates state for the user, update's widgets, calls scanner, updates idle tasks
         print("setting state and calling scanner")
         state.set_current_action("Scanning for processes")
-        self.forceUpdate()
+        self.force_update()
         print(state.get_current_action())
         scanner()
-        self.forceUpdate()            
-        
+        self.force_update()
+
         # Updates current_action
         print("setting state and calling killer")
         state.set_current_action("Killing processes from queue")
-        self.forceUpdate()
-        
-        killer()
-        self.forceUpdate()
-            
+        self.force_update()
 
-    
+        killer()
+        self.force_update()
+
+
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
+
 
 def img_resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -110,7 +110,8 @@ def img_resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
-    
+
+
 # input()
 # Title, Icon, Window size (Width x Length)
 title = "Process Killer"
