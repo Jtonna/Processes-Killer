@@ -5,6 +5,7 @@
 import warnings
 from .dll_queue.queue import Queue
 
+
 class AppState:
     def __init__(self):
         self.current_action = "Enter the name of a process or application"
