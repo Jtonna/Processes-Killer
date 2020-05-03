@@ -1,5 +1,6 @@
-import tkinter as tk
 import sys, os
+import random
+import tkinter as tk
 
 from .app_state import state
 from .scan_processes import scanner
@@ -11,6 +12,7 @@ class ProcessKillerApp(tk.Frame):
         self.pack()
         self.createWidgets()
         self.placeWidgets()
+        self.updateWidgets()
 
     def createWidgets(self):
         """ Design's the widgets that will beused in the GUI """
@@ -29,12 +31,14 @@ class ProcessKillerApp(tk.Frame):
         self.submit_process_name["command"] = self.get_process_to_kill
 
         # Give the user a status update
+        self.current_activity_text = tk.StringVar()
         self.current_activity = tk.Label()
-        self.current_activity["text"] = "Current Activity display (searching/killing)"
+        self.current_activity["textvariable"] = self.current_activity_text
 
         # Display stats to the user about how many processes were found that were relevant and how many were killed
-        self.killed_information = tk.Label()        
-        self.killed_information["text"] = "000 / 000 processes killed"
+        self.scan_counter_text = tk.StringVar()
+        self.scan_counter = tk.Label()        
+        self.scan_counter["textvariable"] = self.scan_counter_text
 
     def placeWidgets(self):
         """ Places widgets in order on the GUI window"""
@@ -42,7 +46,22 @@ class ProcessKillerApp(tk.Frame):
         self.process_name_to_kill.pack()
         self.submit_process_name.pack()
         self.current_activity.pack()
-        self.killed_information.pack()
+        self.scan_counter.pack()
+    
+    def updateWidgetText(self, widget_name, new_text):
+        print("loop")
+
+        current_activity = state.get_current_activity()+"..."
+        self.current_activity_text.set(current_activity)
+
+        # Update process scan counter
+        scan_counter = f"{state.get_processes_scanned()} processes scanned"
+        self.scan_counter_text.set(scan_counter)
+
+        # self.widget_name.set(new_text)
+
+        # Recursion to keep these updating
+        self.master.after(5, self.updateWidgets)
     
     def get_process_to_kill(self):
         """ Triggered by the 'submit_process_information' button
@@ -58,7 +77,6 @@ class ProcessKillerApp(tk.Frame):
 
         # Triggers the scanner function # while loop for killer
         scanner()
-        killer()
     
 
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
