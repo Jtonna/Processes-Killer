@@ -17,6 +17,8 @@ import subprocess
 from .app_state import state
 
 # TODO: Implement a form of logging
+
+
 def scanner():
     print("Starting to scan processes")
     """ Scans the windows system for running processes
@@ -37,8 +39,9 @@ def scanner():
     cmd_command = "WMIC PROCESS GET caption, commandline, processid"
 
     # Create a Command Prompt Window, run the cmd_command, disable a window popup, and allow information to be output with any of the following PIPE's
-    processes = subprocess.Popen(cmd_command, startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-    
+    processes = subprocess.Popen(cmd_command, startupinfo=startupinfo,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+
     # stdout allows us to parse each individual process running.
     for process in processes.stdout:
         """ Each output is encoded, so we need to decode it and convert it to lowercase
@@ -56,8 +59,6 @@ def scanner():
         if name_in_state in lowercase_process_str:
             string_processor(process.decode('utf-8'))
 
-    print("Finished scanning processes")
-    state.set_has_scanned(True)
 
 def string_processor(process):
     """ Formats given 'process' string to extract a process name and process id
@@ -78,13 +79,13 @@ def string_processor(process):
                 if process[i+1] == ' ':
                     name_found = True
                     break
-            
+
             name_list.append(process[i])
-            
+
     # traverse the string from the end for pid
     if pid_found is False:
 
-         # This is the process ID but backwards, since we are looping backwards
+        # This is the process ID but backwards, since we are looping backwards
         temp_list = []
 
         # Used for helping keep track of when the process id is found
@@ -128,7 +129,7 @@ def string_processor(process):
                     temp_list.append(process[index])
             except ValueError:
                 if process[index] == ' ':
-                    if fail_safe is not 2: 
+                    if fail_safe is not 2:
                         fail_safe = 1
                         continue
                 else:
@@ -136,8 +137,7 @@ def string_processor(process):
                         pid_found = True
                         fail_safe = 2
                         break
-            
-                        
+
         # Loop over the temp list and basically reverse it for pid_list
         for i in range(len(temp_list)):
 
@@ -152,6 +152,6 @@ def string_processor(process):
         'name': process_name,
         'pid': process_id
     }
-    
+
     # Add the bucket to the states queue
     state.add_to_kill_queue(bucket)
