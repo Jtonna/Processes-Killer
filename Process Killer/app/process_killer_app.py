@@ -20,9 +20,10 @@ class ProcessKillerApp(tk.Frame):
     def create_widgets(self):
         """ Design's the widgets that will beused in the GUI """
 
-        # Label for instructing user what the hell to do
-        self.instruction_label = tk.Label()
-        self.instruction_label["text"] = "Enter the name of a process or application to kill."
+        # Give the user a status update, by default this instructs the user enter an application name
+        self.current_action_text = tk.StringVar()
+        self.current_action = tk.Label()
+        self.current_action["textvariable"] = self.current_action_text
 
         # Input to let the user give us a process name
         self.process_name_to_kill = tk.Entry()
@@ -32,11 +33,6 @@ class ProcessKillerApp(tk.Frame):
         self.submit_process_name["text"] = "Kill Processes!"
         self.submit_process_name["command"] = self.onClick_submit_process
 
-        # Give the user a status update
-        self.current_action_text = tk.StringVar()
-        self.current_action = tk.Label()
-        self.current_action["textvariable"] = self.current_action_text
-
         # Display stats to the user about how many processes were found that were relevant and how many were killed
         self.scan_counter_text = tk.StringVar()
         self.scan_counter = tk.Label()
@@ -44,10 +40,9 @@ class ProcessKillerApp(tk.Frame):
 
     def place_widgets(self):
         """ Places widgets in order on the GUI window"""
-        self.instruction_label.pack()
+        self.current_action.pack()
         self.process_name_to_kill.pack()
         self.submit_process_name.pack()
-        self.current_action.pack()
         self.scan_counter.pack()
 
     def update_widgets(self):
@@ -81,7 +76,7 @@ class ProcessKillerApp(tk.Frame):
         state.set_name(process_name)
         print("starting application scripts")
 
-        # Updates state for the user, update's widgets, calls scanner, updates idle tasks
+        # Sets current_action, update's widgets, calls scanner, updates idle tasks
         print("setting state and calling scanner")
         state.set_current_action("Scanning for processes")
         self.force_update()
@@ -89,13 +84,18 @@ class ProcessKillerApp(tk.Frame):
         scanner()
         self.force_update()
 
-        # Updates current_action
+        # Sets current_action, updates widgets, kills applications from queue
         print("setting state and calling killer")
-        state.set_current_action("Killing processes from queue")
+        state.set_current_action("Killing processes")
+        print(state.get_current_action())
         self.force_update()
-
         killer()
+        
+        # Sets current_action, updates widgets
+        state.set_current_action("Enter another process or application name")
         self.force_update()
+        
+
 
 
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
