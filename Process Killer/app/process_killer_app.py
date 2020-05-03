@@ -1,8 +1,6 @@
 import sys
 import os
-import random
 import tkinter as tk
-import time
 
 from .app_state import state
 from .scan_processes import scanner
@@ -56,56 +54,62 @@ class ProcessKillerApp(tk.Frame):
         scan_counter = f"{state.get_processes_scanned_count()} processes scanned"
         self.scan_counter_text.set(scan_counter)
 
-    def force_update(self):
-        """ Triggers a widget update, then forces an update of idle tasks (ie like a widget update)
+    def force_gui_update(self):
+        """ Triggers a widget update, then forces an update of idle tasks (like a pending widget update);
             this allows us to tell the user whats happening in the application at any given moment"""
+
         print("Forced update")
         self.update_widgets()
         self.master.update_idletasks()
 
+    def input_validation(self, input):
+        """ Checks the value of the passed-in string and returns True or False depending of if the input is valid """
+
+        # Case: user doesnt enter anything, they just submit
+        if len(input) == 0:
+            return False
+
+        # If all of the above conditions are false, we know the string is valid
+        return True
+
+
     def onClick_submit_process(self):
-        """ Triggered by the 'submit_process_information' button
-            It sets the process name in app/state_info.
-            Triggers the scanner function.
-            Triggers killer function"""
+        """ Triggered by the 'submit_process_name' button, this method contains all of the run-time logic for the application"""
 
         while state.get_has_scanned_and_killed() is False:
-            # Gets the process name from the textbox in all lowercase
             process_name = self.process_name_to_kill.get().lower()
 
-            # Sets the name in the application state
-            if len(process_name) == 0:
-                print("app name too small")
-                # Case: The user hit enter or submit without typing anything
+            # Validate textbox input; if false, BREAK so the user can try again with a diffrent name
+            if self.input_validation(process_name) is False:
+                print("\nInput not valid\n")
                 break
+            
+            # Sets the name in the application state
             state.set_name(process_name)
             print("starting application scripts")
 
             # Sets current_action, update's widgets, calls scanner, updates idle tasks
             print("setting state and calling scanner")
             state.set_current_action("Scanning for processes")
-            self.force_update()
+            self.force_gui_update()
             print(state.get_current_action())
             scanner()
-            self.force_update()
+            self.force_gui_update()
 
             # Sets current_action, updates widgets, kills applications from queue
             print("setting state and calling killer")
             state.set_current_action("Killing processes")
             print(state.get_current_action())
-            self.force_update()
+            self.force_gui_update()
             killer()
 
             # Sets current_action, updates widgets
-            state.set_current_action("Enter another process or application name")
-            self.force_update()
+            state.set_current_action(
+                "Enter another process or application name")
+            self.force_gui_update()
 
             # Call set_has_scanned_and_killed(), setting the value to true and ending the loop
             state.set_has_scanned_and_killed()
-        #TODO: notify the user with a pop-up to "wait" or to re-start the application
-        else:
-            pass
-
 
 
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
