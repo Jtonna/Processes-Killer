@@ -14,9 +14,7 @@
     """
 
 import subprocess
-import time
 from .app_state import state
-from .kill_from_queue import killer
 
 
 # TODO: Implement a form of logging
@@ -24,7 +22,7 @@ def scanner():
     """ Scans the windows system for running processes
         compares each process running to see if the application_name from state can be found
         if it is found, we pass it to string_processor """
-    state.set_current_activity("Scanning processes")
+
     """ On windows a 'subprocess' command will cause a Command Prompt window to open
         since we are compiling the appliction with pyinstaller using the '--noconsole' command
         the application fails to launch.
@@ -57,9 +55,6 @@ def scanner():
         # If the application name the user entered is found as a sub-string in the process sting pass it to the string_processor
         if name_in_state in lowercase_process_str:
             string_processor(process.decode('utf-8'))
-
-    time.sleep(1)
-    killer()
 
 def string_processor(process):
     """ Formats given 'process' string to extract a process name and process id
