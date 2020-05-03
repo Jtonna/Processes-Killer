@@ -5,6 +5,7 @@ class AppState:
     def __init__(self):
         self.application_name = None
         self.processes_scanned_count = 0
+        self.current_activity = "Waiting for user input"
         self.q = Queue()
 
     def set_name(self, application_name=None, processes_scanned=0):   
@@ -36,6 +37,16 @@ class AppState:
     def increment_process_scanned_count(self):
         """ Increments processes_scanned by 1 everytime it gets called """
         self.processes_scanned_count = self.processes_scanned_count + 1
+    
+    def get_processes_scanned(self):
+        """ Returns the total number of processes scanned """
+        return self.processes_scanned_count
+
+    def set_current_activity(self, action):
+        self.current_activity = action
+
+    def get_current_activity(self):
+        return self.current_activity
     
     def add_to_queue(self, value):
         """ Using the Queue 'q', we are able to easily add a 'bucket' of data to end of the queue """
