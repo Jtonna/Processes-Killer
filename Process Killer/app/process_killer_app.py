@@ -69,32 +69,43 @@ class ProcessKillerApp(tk.Frame):
             Triggers the scanner function.
             Triggers killer function"""
 
-        # Gets the process name from the textbox in all lowercase
-        process_name = self.process_name_to_kill.get().lower()
+        # This prevents a double-click slowing freezing the application
+        while state.get_has_scanned() is False:
+            # Gets the process name from the textbox in all lowercase
+            process_name = self.process_name_to_kill.get().lower()
 
-        # Sets the name in the application state
-        state.set_name(process_name)
-        print("starting application scripts")
+            # Sets the name in the application state
+            if len(process_name) == 0:
+                print("app name too small")
+                # Case: The user hit enter or submit without typing anything
+                break
+            state.set_name(process_name)
+            print("starting application scripts")
 
-        # Sets current_action, update's widgets, calls scanner, updates idle tasks
-        print("setting state and calling scanner")
-        state.set_current_action("Scanning for processes")
-        self.force_update()
-        print(state.get_current_action())
-        scanner()
-        self.force_update()
+            # Sets current_action, update's widgets, calls scanner, updates idle tasks
+            print("setting state and calling scanner")
+            state.set_current_action("Scanning for processes")
+            self.force_update()
+            print(state.get_current_action())
+            scanner()
+            self.force_update()
 
-        # Sets current_action, updates widgets, kills applications from queue
-        print("setting state and calling killer")
-        state.set_current_action("Killing processes")
-        print(state.get_current_action())
-        self.force_update()
-        killer()
-        
-        # Sets current_action, updates widgets
-        state.set_current_action("Enter another process or application name")
-        self.force_update()
-        
+            # Sets current_action, updates widgets, kills applications from queue
+            print("setting state and calling killer")
+            state.set_current_action("Killing processes")
+            print(state.get_current_action())
+            self.force_update()
+            killer()
+
+            # Sets current_action, updates widgets
+            state.set_current_action("Enter another process or application name")
+            self.force_update()
+
+            # Call set_has_scanned(), setting the value to true and ending the loop
+            state.set_has_scanned()
+        #TODO: notify the user with a pop-up to "wait" or to re-start the application
+        else:
+            pass
 
 
 
