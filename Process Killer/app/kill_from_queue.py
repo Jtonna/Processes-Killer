@@ -13,8 +13,11 @@ import subprocess
 from .app_state import state
 
 def killer():
+    state.set_current_activity("Killing processes")
     while state.len_of_queue() > 0:
 
         item = state.remove_from_queue()
         command = "taskkill /F /PID "+item['pid']
         subprocess.Popen(command, shell=True)
+    
+    state.set_current_activity("Waiting for user inputt")
