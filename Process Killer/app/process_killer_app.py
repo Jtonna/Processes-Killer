@@ -69,8 +69,7 @@ class ProcessKillerApp(tk.Frame):
             Triggers the scanner function.
             Triggers killer function"""
 
-        # This prevents a double-click slowing freezing the application
-        while state.get_has_scanned() is False:
+        while state.get_has_scanned_and_killed() is False:
             # Gets the process name from the textbox in all lowercase
             process_name = self.process_name_to_kill.get().lower()
 
@@ -101,8 +100,8 @@ class ProcessKillerApp(tk.Frame):
             state.set_current_action("Enter another process or application name")
             self.force_update()
 
-            # Call set_has_scanned(), setting the value to true and ending the loop
-            state.set_has_scanned()
+            # Call set_has_scanned_and_killed(), setting the value to true and ending the loop
+            state.set_has_scanned_and_killed()
         #TODO: notify the user with a pop-up to "wait" or to re-start the application
         else:
             pass
