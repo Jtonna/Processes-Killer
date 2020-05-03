@@ -29,7 +29,7 @@ class ProcessKillerApp(tk.Frame):
         # Button for submitting the process name to be killed
         self.submit_process_name = tk.Button()
         self.submit_process_name["text"] = "Kill Processes!"
-        self.submit_process_name["command"] = self.start_killing_processes
+        self.submit_process_name["command"] = self.onClick_submit_process
 
         # Give the user a status update
         self.current_action_text = tk.StringVar()
@@ -67,7 +67,7 @@ class ProcessKillerApp(tk.Frame):
         self.updateWidgets()
         self.master.update_idletasks()
 
-    def start_killing_processes(self):
+    def onClick_submit_process(self):
         """ Triggered by the 'submit_process_information' button
             It sets the process name in app/state_info.
             Triggers the scanner function.
@@ -80,25 +80,22 @@ class ProcessKillerApp(tk.Frame):
         state.set_name(process_name)
         print("starting application scripts")
 
-        # Triggers the scanner function through state # while loop for killer
-        if state.get_has_scanned() is False:
-            
-            # Updates state for the user, update's widgets, calls scanner, updates idle tasks
-            print("setting state and calling scanner")
-            state.set_current_action("Scanning for processes")
-            self.forceUpdate()
-            print(state.get_current_action())
-            scanner()
-
-            self.forceUpdate()            
-            
-            # Updates current_action
-            print("setting state and calling killer")
-            state.set_current_action("Killing processes from queue")
-            self.forceUpdate()
-            
-            killer()
-            self.forceUpdate()
+      
+        # Updates state for the user, update's widgets, calls scanner, updates idle tasks
+        print("setting state and calling scanner")
+        state.set_current_action("Scanning for processes")
+        self.forceUpdate()
+        print(state.get_current_action())
+        scanner()
+        self.forceUpdate()            
+        
+        # Updates current_action
+        print("setting state and calling killer")
+        state.set_current_action("Killing processes from queue")
+        self.forceUpdate()
+        
+        killer()
+        self.forceUpdate()
             
 
     
