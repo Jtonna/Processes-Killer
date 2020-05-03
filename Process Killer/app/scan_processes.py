@@ -16,13 +16,12 @@
 import subprocess
 from .app_state import state
 
-""" Scans the windows system for running processes
-    compares each process running to see if the application_name from state can be found
-    if it is found, we pass it to string_processor """
 
 # TODO: Implement a form of logging
 def scanner():
-    state.increment_process_scanned_count()
+    """ Scans the windows system for running processes
+        compares each process running to see if the application_name from state can be found
+        if it is found, we pass it to string_processor """
 
     """ On windows a 'subprocess' command will cause a Command Prompt window to open
         since we are compiling the appliction with pyinstaller using the '--noconsole' command
@@ -42,12 +41,12 @@ def scanner():
     
     # stdout allows us to parse each individual process running.
     for process in processes.stdout:
-
         """ Each output is encoded, so we need to decode it and convert it to lowercase
             we also get the name of the applicationw we want from state so we only parse strings that contain that name """
-        lowercase_process_str = process.decode('utf-8').lower()
-        name_in_state = state.get_name()
+
         state.increment_process_scanned_count()
+        name_in_state = state.get_name()
+        lowercase_process_str = process.decode('utf-8').lower()
 
         # Sometimes there are lines completely made of spaces and nothing more, so we pass if the line length is 0 after removing the spaces.
         if len(process.strip()) is 0:
@@ -57,9 +56,9 @@ def scanner():
         if name_in_state in lowercase_process_str:
             string_processor(process.decode('utf-8'))
 
-""" Formats given 'process' string to extract a process name and process id
-    passes that info as a dictionary to a Queue """
 def string_processor(process):
+    """ Formats given 'process' string to extract a process name and process id
+        passes that info as a dictionary to a Queue """
 
     # Variables for keeping track of the process name & id statuses
     name_found = False
