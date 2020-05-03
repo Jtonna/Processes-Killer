@@ -48,20 +48,15 @@ class ProcessKillerApp(tk.Frame):
         self.current_activity.pack()
         self.scan_counter.pack()
     
-    def updateWidgetText(self, widget_name, new_text):
+    def updateWidgets(self):
         print("loop")
-
-        current_activity = state.get_current_activity()+"..."
-        self.current_activity_text.set(current_activity)
 
         # Update process scan counter
         scan_counter = f"{state.get_processes_scanned()} processes scanned"
         self.scan_counter_text.set(scan_counter)
 
-        # self.widget_name.set(new_text)
-
         # Recursion to keep these updating
-        self.master.after(5, self.updateWidgets)
+        self.master.after(200, self.updateWidgets)
     
     def get_process_to_kill(self):
         """ Triggered by the 'submit_process_information' button
@@ -75,8 +70,8 @@ class ProcessKillerApp(tk.Frame):
         # Sets the name in the application state
         state.set_name(process_name)
 
-        # Triggers the scanner function # while loop for killer
-        scanner()
+        # Triggers the scanner function through state # while loop for killer
+        killer()
     
 
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
