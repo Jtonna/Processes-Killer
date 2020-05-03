@@ -7,8 +7,8 @@ class AppState:
         self.processes_scanned_count = 0
         self.q = Queue()
 
-    """ Allows us to set the application name the user wants to kill """
     def set_name(self, application_name=None, processes_scanned=0):   
+        """ Allows us to set the application name the user wants to kill """
         # TODO: Setup logger for all the print statements below
 
 
@@ -29,35 +29,35 @@ class AppState:
             # print("\nNameWarning @app_state.py:\n   Setting application name for the first name")
             self.application_name = application_name
     
-    """ Returns the application name for evaluation in the process string """
     def get_name(self):
+        """ Returns the application name for evaluation in the process string """
         return self.application_name
     
-    """ Increments processes_scanned by 1 everytime it gets called """
     def increment_process_scanned_count(self):
+        """ Increments processes_scanned by 1 everytime it gets called """
         self.processes_scanned_count = self.processes_scanned_count + 1
     
-    """ Using the Queue 'q', we are able to easily add a 'bucket' of data to end of the queue """
     def add_to_queue(self, value):
+        """ Using the Queue 'q', we are able to easily add a 'bucket' of data to end of the queue """
         self.processes_scanned_count = self.processes_scanned_count+1
         self.q.enqueue(value)
     
-    """ Using the Queue 'q', we are able to Remove & Return the first item from the queue """
     def remove_from_queue(self):
+        """ Using the Queue 'q', we are able to Remove & Return the first item from the queue """
         return self.q.dequeue()
 
-    """ Using the Queue 'q', we can monitor the length of the q; ie how many 'buckets' there are """
     def len_of_queue(self):
+        """ Using the Queue 'q', we can monitor the length of the q; ie how many 'buckets' there are """
         return self.q.len()
    
-    """ Returns the application state for debugging"""
     def get_state(self):
+        """ Returns the application state for debugging"""
         # print( self.application_name, self.processes_scanned_count )
         pass
 
-    """ This completely wipes and resets the state,
-        this is useful for when the user wants to kill more than one application"""
     def _reset_state(self):
+        """ This completely wipes and resets the state,
+            this is useful for when the user wants to kill more than one application"""
         # TODO: Implement _reset_state
         pass
 
