@@ -44,10 +44,12 @@ class AppState:
         """ Returns the application name for evaluation in the process string """
         return self.application_name
 
-    def set_has_scanned(self, boolean):
+    def set_has_scanned(self):
         """ Sets a has_scanned to True to help determine if we have already scanned for running processes """
         if self.has_scanned is False:
             self.has_scanned = True
+        else:
+            self.has_scanned = False
     
     def get_has_scanned(self):
         """ Returns the has_scanned boolean """
