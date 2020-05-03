@@ -2,11 +2,13 @@
 
 block_cipher = None
 
-
+added_files = [
+    ('app/img/app_icon.ico','app/img/')
+]
 a = Analysis(['main.py'],
              pathex=['D:\\Github Repos\\Processes-Killer\\Process Killer'],
              binaries=[],
-             datas=[],
+             datas=added_files,
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -30,4 +32,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False )
+          console=True , uac_admin=True, icon='app\\img\\app_icon.ico')
