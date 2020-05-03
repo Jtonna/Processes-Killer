@@ -28,7 +28,7 @@ class ProcessKillerApp(tk.Frame):
         # Button for submitting the process name to be killed
         self.submit_process_name = tk.Button()
         self.submit_process_name["text"] = "Kill Processes!"
-        self.submit_process_name["command"] = self.get_process_to_kill
+        self.submit_process_name["command"] = self.start_killing_processes
 
         # Give the user a status update
         self.current_activity_text = tk.StringVar()
@@ -52,13 +52,13 @@ class ProcessKillerApp(tk.Frame):
         print("loop")
 
         # Update process scan counter
-        scan_counter = f"{state.get_processes_scanned()} processes scanned"
+        scan_counter = f"{state.get_processes_scanned_count()} processes scanned"
         self.scan_counter_text.set(scan_counter)
 
         # Recursion to keep these updating
         self.master.after(200, self.updateWidgets)
     
-    def get_process_to_kill(self):
+    def start_killing_processes(self):
         """ Triggered by the 'submit_process_information' button
             It sets the process name in app/state_info.
             Triggers the scanner function.
@@ -69,11 +69,17 @@ class ProcessKillerApp(tk.Frame):
 
         # Sets the name in the application state
         state.set_name(process_name)
+        print("start_killing_processes")
 
         # Triggers the scanner function through state # while loop for killer
-        killer()
-    
+        if state.get_has_scanned() is False:
+            print("calling scanner")
+            scanner()
+            self.master.update_idletasks()
+            print("scanner finished, calling killer")
+            killer()
 
+    
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
 
 def img_resource_path(relative_path):

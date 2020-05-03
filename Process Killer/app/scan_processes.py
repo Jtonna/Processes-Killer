@@ -16,9 +16,9 @@
 import subprocess
 from .app_state import state
 
-
 # TODO: Implement a form of logging
 def scanner():
+    print("Starting to scan processes")
     """ Scans the windows system for running processes
         compares each process running to see if the application_name from state can be found
         if it is found, we pass it to string_processor """
@@ -55,6 +55,9 @@ def scanner():
         # If the application name the user entered is found as a sub-string in the process sting pass it to the string_processor
         if name_in_state in lowercase_process_str:
             string_processor(process.decode('utf-8'))
+
+    print("Finished scanning processes")
+    state.set_has_scanned(True)
 
 def string_processor(process):
     """ Formats given 'process' string to extract a process name and process id
@@ -151,4 +154,4 @@ def string_processor(process):
     }
     
     # Add the bucket to the states queue
-    state.add_to_queue(bucket)
+    state.add_to_kill_queue(bucket)

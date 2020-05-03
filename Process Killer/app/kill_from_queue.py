@@ -11,13 +11,11 @@
         - When using Remote Desktop, the shell will still work"""
 import subprocess
 from .app_state import state
+from .scan_processes import scanner
 
 def killer():
-    state.set_current_activity("Killing processes")
-    while state.len_of_queue() > 0:
-
-        item = state.remove_from_queue()
+    while state.len_of_kill_queue() > 0:
+        print("Killing Process")
+        item = state.remove_from_kill_queue()
         command = "taskkill /F /PID "+item['pid']
         subprocess.Popen(command, shell=True)
-    
-    state.set_current_activity("Waiting for user inputt")

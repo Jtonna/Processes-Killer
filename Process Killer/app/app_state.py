@@ -5,10 +5,11 @@ class AppState:
     def __init__(self):
         self.application_name = None
         self.processes_scanned_count = 0
-        self.current_activity = "Waiting for user input"
-        self.q = Queue()
+        self.has_scanned = False
+        self.unprocessed_strings_q = Queue()
+        self.kill_q = Queue()
 
-    def set_name(self, application_name=None, processes_scanned=0):   
+    def set_name(self, application_name=None):   
         """ Allows us to set the application name the user wants to kill """
         # TODO: Setup logger for all the print statements below
 
@@ -29,7 +30,7 @@ class AppState:
         else:
             # print("\nNameWarning @app_state.py:\n   Setting application name for the first name")
             self.application_name = application_name
-    
+
     def get_name(self):
         """ Returns the application name for evaluation in the process string """
         return self.application_name
@@ -38,33 +39,29 @@ class AppState:
         """ Increments processes_scanned by 1 everytime it gets called """
         self.processes_scanned_count = self.processes_scanned_count + 1
     
-    def get_processes_scanned(self):
+    def get_processes_scanned_count(self):
         """ Returns the total number of processes scanned """
         return self.processes_scanned_count
 
-    def set_current_activity(self, action):
-        self.current_activity = action
-
-    def get_current_activity(self):
-        return self.current_activity
+    def set_has_scanned(self, boolean):
+        if self.has_scanned is False:
+            self.has_scanned = True
     
-    def add_to_queue(self, value):
+    def get_has_scanned(self):
+        return self.has_scanned
+
+    def add_to_kill_queue(self, value):
         """ Using the Queue 'q', we are able to easily add a 'bucket' of data to end of the queue """
         self.processes_scanned_count = self.processes_scanned_count+1
-        self.q.enqueue(value)
+        self.kill_q.enqueue(value)
     
-    def remove_from_queue(self):
+    def remove_from_kill_queue(self):
         """ Using the Queue 'q', we are able to Remove & Return the first item from the queue """
-        return self.q.dequeue()
+        return self.kill_q.dequeue()
 
-    def len_of_queue(self):
+    def len_of_kill_queue(self):
         """ Using the Queue 'q', we can monitor the length of the q; ie how many 'buckets' there are """
-        return self.q.len()
-   
-    def get_state(self):
-        """ Returns the application state for debugging"""
-        # print( self.application_name, self.processes_scanned_count )
-        pass
+        return self.kill_q.len()
 
     def _reset_state(self):
         """ This completely wipes and resets the state,
