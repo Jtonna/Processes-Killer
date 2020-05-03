@@ -1,5 +1,5 @@
 ('D:\\Github Repos\\Processes-Killer\\Process Killer\\dist\\Process Killer.exe',
- True,
+ False,
  False,
  False,
  'app\\img\\app_icon.ico',
@@ -2623,7 +2623,7 @@
  [],
  False,
  False,
- 1588480424,
- [('run.exe',
-   'c:\\python37\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit\\run.exe',
+ 1588480688,
+ [('runw.exe',
+   'c:\\python37\\lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit\\runw.exe',
    'EXECUTABLE')])
