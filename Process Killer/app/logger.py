@@ -11,7 +11,7 @@ class Logger:
     def debug(self, value):
         logging.debug(value)
 
-    def warning(self, value):
+    def warn(self, value):
         logging.warning(value)
 
     def error(self, value):
