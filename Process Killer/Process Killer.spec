@@ -32,4 +32,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True , uac_admin=True, icon='app\\img\\app_icon.ico')
+          console=False , uac_admin=True, icon='app\\img\\app_icon.ico')

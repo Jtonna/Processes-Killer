@@ -4,10 +4,9 @@ import tempfile
 
 class Logger:
     def __init__(self):
-        x = tempfile.gettempdir()
-        y = x+"\process_killer.log"
-        print(y)
-        logging.basicConfig(format="[ %(asctime)s %(levelname)s]: %(message)s", filename=y, filemode="w", level=logging.DEBUG)
+        temp_dir = tempfile.gettempdir()
+        path_and_file_name = temp_dir+"\process_killer.log"
+        logging.basicConfig(format="[ %(asctime)s %(levelname)s]: %(message)s", filename=path_and_file_name, filemode="w", level=logging.DEBUG)
 
     def info(self, value):
         logging.info(value)
