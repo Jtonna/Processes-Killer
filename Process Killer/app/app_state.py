@@ -109,6 +109,5 @@ class AppState:
         self.application_name = None
 
 
-
 # Creates the state object so it can be accesses from anywhere in the application
 state = AppState()
