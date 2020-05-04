@@ -92,24 +92,24 @@ class AppState:
         """ Using the Queue 'q', we are able to Remove & Return the first item from the queue """
         return self.kill_q.dequeue()
 
-    def _reset_state(self):
-        """ This method resets parts of the application state required for
-            killing more than one application"""
+    # def _reset_state(self):
+    #     """ This method resets parts of the application state required for
+    #         killing more than one application"""
         
-        # Empty out the kill queue
-        while self.len_of_kill_queue() > 0:
-            self.remove_from_queue()
+    #     # Empty out the kill queue
+    #     while self.len_of_kill_queue() > 0:
+    #         self.remove_from_queue()
         
-        # Empty out the unprocesses strings queue
-        while self.len_of_unprocesses_strings_queue() > 0:
-            self.remove_from_unprocesseed_strings_queue()
-        # Reset application name
-        self.application_name = None
+    #     # Empty out the unprocesses strings queue
+    #     while self.len_of_unprocesses_strings_queue() > 0:
+    #         self.remove_from_unprocesseed_strings_queue()
+    #     # Reset application name
+    #     self.application_name = None
 
-        # Reset has_scanned_and_killed()
-        self.has_scanned_and_killed = False
+    #     # Reset has_scanned_and_killed()
+    #     self.has_scanned_and_killed = False
 
-        # Resets 
+    #     # Resets 
 
 
 # Creates the state object so it can be accesses from anywhere in the application
