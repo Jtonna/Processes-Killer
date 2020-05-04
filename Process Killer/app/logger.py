@@ -1,9 +1,13 @@
 import logging
-import os
+import logging.config
+import tempfile
 
 class Logger:
     def __init__(self):
-        logging.basicConfig(format="[%(levelname)s] %(message)s; %(asctime)s", filename="process_killer.log", filemode="w", level=logging.DEBUG)
+        x = tempfile.gettempdir()
+        y = x+"\process_killer.log"
+        print(y)
+        logging.basicConfig(format="[ %(asctime)s %(levelname)s]: %(message)s", filename=y, filemode="w", level=logging.DEBUG)
 
     def info(self, value):
         logging.info(value)

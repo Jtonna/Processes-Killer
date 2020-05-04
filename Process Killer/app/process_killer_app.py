@@ -17,7 +17,7 @@ class ProcessKillerApp(tk.Frame):
         self.create_widgets()
         self.place_widgets()
         self.update_widgets()
-        log.critical(f"from [ProcessKillerApp.__init__]: Application window either created or closed")
+        log.critical(f"from [ProcessKillerApp.__init__()]: Application window either created or closed")
 
     def create_widgets(self):
         """ Design's the widgets that will beused in the GUI """

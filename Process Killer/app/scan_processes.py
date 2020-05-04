@@ -14,8 +14,7 @@
     """
 import subprocess
 from .app_state import state
-
-# TODO: Implement a form of logging
+from .logger import log
 
 
 def scanner():
