@@ -68,9 +68,11 @@ class ProcessKillerApp(tk.Frame):
 
         # Case: user doesnt enter anything, they just submit
         if len(input) == 0:
+            log.warn(f"from [ProcessKillerApp.input_validation()]: user has given an input with no character's '{input}', further processing of the input has stopped & no programs will be killed")
             return False
 
         # If all of the above conditions are false, we know the string is valid
+        log.info(f"from [ProcessKillerApp.inputValidation()]: input {input} is a valid name; we will continue run-time evaluation to kill processes that contain said name")
         return True
 
     def start_process_scanner(self):
