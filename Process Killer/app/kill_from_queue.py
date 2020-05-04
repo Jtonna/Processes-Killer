@@ -35,4 +35,5 @@ def killer():
     # If the kill list contains pid's and commands, kill them all at once
     cmd = task_kill_command+pid_string
     subprocess.Popen(cmd, shell=True)
-    log.warn(f"from [kill_from_queue.killer()]: finished running the following command '{cmd}' ")
+    log.warn(
+        f"from [kill_from_queue.killer()]: finished running the following command '{cmd}' ")

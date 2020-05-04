@@ -26,7 +26,8 @@ class AppState:
 
     def set_name(self, application_name=None):
         """ Allows us to set the application name the user wants to kill """
-        log.info(f"from [AppState.set_name()]: setting application name '{application_name}'")
+        log.info(
+            f"from [AppState.set_name()]: setting application name '{application_name}'")
         self.application_name = application_name
 
     def get_name(self):
@@ -81,7 +82,8 @@ class AppState:
         """ This method resets parts of the application state required for
             killing more than one application"""
 
-        log.warn(f"from [AppState._reset_state()]: application state is being reset to allow for another application name to be processed and killed")
+        log.warn(
+            f"from [AppState._reset_state()]: application state is being reset to allow for another application name to be processed and killed")
 
         # Empty out the kill queue
         while self.len_of_kill_queue() > 0:

@@ -17,7 +17,8 @@ class ProcessKillerApp(tk.Frame):
         self.create_widgets()
         self.place_widgets()
         self.update_widgets()
-        log.critical(f"from [ProcessKillerApp.__init__()]: Application window either created or closed")
+        log.critical(
+            f"from [ProcessKillerApp.__init__()]: Application window either created or closed")
 
     def create_widgets(self):
         """ Design's the widgets that will beused in the GUI """
@@ -69,17 +70,20 @@ class ProcessKillerApp(tk.Frame):
 
         # Case: user doesnt enter anything, they just submit
         if len(input) == 0:
-            log.warn(f"from [ProcessKillerApp.input_validation()]: user has given an input with no character's '{input}', further processing of the input has stopped & no programs will be killed")
+            log.warn(
+                f"from [ProcessKillerApp.input_validation()]: user has given an input with no character's '{input}', further processing of the input has stopped & no programs will be killed")
             return False
 
         # If all of the above conditions are false, we know the string is valid
-        log.info(f"from [ProcessKillerApp.inputValidation()]: input {input} is a valid name; we will continue run-time evaluation to kill processes that contain said name")
+        log.info(
+            f"from [ProcessKillerApp.inputValidation()]: input {input} is a valid name; we will continue run-time evaluation to kill processes that contain said name")
         return True
 
     def start_process_scanner(self):
         """ Updates state with the current action, forces GUI update, starts scanner(), forces another gui update"""
 
-        log.warn(f"from [ProcessKillerApp.start_process_scanner()]: Starting scanner() and updating the current_action in state")
+        log.warn(
+            f"from [ProcessKillerApp.start_process_scanner()]: Starting scanner() and updating the current_action in state")
         state.set_current_action("Scanning for processes")
         self.force_gui_update()
         scanner()
@@ -88,7 +92,8 @@ class ProcessKillerApp(tk.Frame):
     def start_process_killer(self):
         """ Updates state with the current action, forces GUI update, starts killer(), forces another gui update"""
 
-        log.warn(f"from [ProcessKillerApp.start_process_killer()]: Starting killer() and updating the current_action in state")
+        log.warn(
+            f"from [ProcessKillerApp.start_process_killer()]: Starting killer() and updating the current_action in state")
         state.set_current_action("Killing processes")
         self.force_gui_update()
         killer()
@@ -99,7 +104,8 @@ class ProcessKillerApp(tk.Frame):
         # If the user has already scanned and killed processes
         if state.get_has_scanned_and_killed() is True:
             state._reset_state()
-            log.info(f"from [ProcessKillerApp.onClick_submit_process()]: triggering state reset & preforming a callback")
+            log.info(
+                f"from [ProcessKillerApp.onClick_submit_process()]: triggering state reset & preforming a callback")
             self.onClick_submit_process()
 
         while state.get_has_scanned_and_killed() is False:
@@ -112,7 +118,8 @@ class ProcessKillerApp(tk.Frame):
 
             # Sets the name in the application state
             state.set_name(process_name)
-            log.critical(f"from [ProcessKillerApp.onClick_submit_process()]: Starting application scripts")
+            log.critical(
+                f"from [ProcessKillerApp.onClick_submit_process()]: Starting application scripts")
 
             # starts the scanner method
             self.start_process_scanner()
@@ -127,7 +134,8 @@ class ProcessKillerApp(tk.Frame):
 
             # Call set_has_scanned_and_killed(), setting the value to true and ending the loop
             state.set_has_scanned_and_killed()
-            log.critical(f"from [ProcessKillerApp.onClick_submit_process()]: Finished running application scripts")
+            log.critical(
+                f"from [ProcessKillerApp.onClick_submit_process()]: Finished running application scripts")
 
 
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """

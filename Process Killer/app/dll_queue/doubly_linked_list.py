@@ -71,7 +71,6 @@ class DoublyLinkedList:
         # increment the length
         self.length += 1
 
-
     """Removes the List's current head node, making the
     current head's next node the new head of the List.
     Returns the value of the removed Node."""
