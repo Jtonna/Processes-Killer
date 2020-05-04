@@ -1,5 +1,5 @@
-""" Contains the GUI & run-time logic for the application"""
-
+""" Contains the GUI & run-time logic for the application
+        - if you would like to trace the runtime-logic see method onClick_submit_process() """
 import sys
 import os
 import tkinter as tk
@@ -114,7 +114,8 @@ class ProcessKillerApp(tk.Frame):
             self.start_process_killer()
 
             # Sets current_action, updates widgets
-            state.set_current_action("Enter another process or application name")
+            state.set_current_action(
+                "Enter another process or application name")
             self.force_gui_update()
 
             # Call set_has_scanned_and_killed(), setting the value to true and ending the loop

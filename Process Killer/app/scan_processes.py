@@ -12,7 +12,6 @@
         
         - Creates a dict (bucket) and passes it to the state's queue
     """
-
 import subprocess
 from .app_state import state
 

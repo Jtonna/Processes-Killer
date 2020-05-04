@@ -9,10 +9,11 @@ import subprocess
 from .app_state import state
 from .scan_processes import scanner
 
+
 def killer():
     """ Dequeues, adds the queue item's PID to a list as a string with '/pid ' appended to the beginning.
         Then merges the list into a string, and runs the taskkill command to kill all the tasks at once
-        
+
         !WARNING: If a task that has spawned a process child is killed, they will all be terminated as well;
         This produces an 'ERROR: The process xxxx not found' that we can just ignore."""
 
