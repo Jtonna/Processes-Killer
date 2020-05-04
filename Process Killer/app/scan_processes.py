@@ -19,10 +19,11 @@ from .app_state import state
 
 
 def scanner():
-    print("Starting to scan processes")
     """ Scans the windows system for running processes
         compares each process running to see if the application_name from state can be found
         if it is found, we pass it to string_processor """
+
+    log.info(f"from [scan_processes.scanner()]: Started scanning processes")
 
     """ On windows a 'subprocess' command will cause a Command Prompt window to open
         since we are compiling the appliction with pyinstaller using the '--noconsole' command
@@ -57,6 +58,8 @@ def scanner():
         # If the application name the user entered is found as a sub-string in the process sting pass it to the string_processor
         if name_in_state in lowercase_process_str:
             string_processor(process.decode('utf-8'))
+
+    log.info(f"from [scan_processes.scanner()]: Finished scanning all system processes")
 
 
 def string_processor(process):
