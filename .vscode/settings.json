@@ -1,5 +1,5 @@
 {
-    "python.linting.pylintEnabled": true,
-    "python.linting.enabled": false,
-    "python.pythonPath": "C:\\Users\\Jtonna\\.virtualenvs\\Process_Killer-XLgtqNoi\\Scripts\\python.exe"
+    "python.linting.enabled": true,
+    "python.pythonPath": "C:\\Python37\\python.exe",
+    "python.linting.pylintEnabled": true
 }

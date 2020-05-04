@@ -1,24 +1,32 @@
+""" Contains the GUI & run-time logic for the application
+        - if you would like to trace the runtime-logic see method onClick_submit_process() """
+import sys
+import os
 import tkinter as tk
-import sys, os
 
 from .app_state import state
 from .scan_processes import scanner
 from .kill_from_queue import killer
+from .logger import log
+
 
 class ProcessKillerApp(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
         self.pack()
-        self.createWidgets()
-        self.placeWidgets()
+        self.create_widgets()
+        self.place_widgets()
+        self.update_widgets()
+        log.critical(
+            f"from [ProcessKillerApp.__init__()]: Application window either created or closed")
 
-    def createWidgets(self):
+    def create_widgets(self):
         """ Design's the widgets that will beused in the GUI """
 
-
-        # Label for instructing user what the hell to do
-        self.instruction_label = tk.Label()
-        self.instruction_label["text"] = "Enter the name of a process or application to kill."
+        # Give the user a status update, by default this instructs the user enter an application name
+        self.current_action_text = tk.StringVar()
+        self.current_action = tk.Label()
+        self.current_action["textvariable"] = self.current_action_text
 
         # Input to let the user give us a process name
         self.process_name_to_kill = tk.Entry()
@@ -26,42 +34,112 @@ class ProcessKillerApp(tk.Frame):
         # Button for submitting the process name to be killed
         self.submit_process_name = tk.Button()
         self.submit_process_name["text"] = "Kill Processes!"
-        self.submit_process_name["command"] = self.get_process_to_kill
-
-        # Give the user a status update
-        self.current_activity = tk.Label()
-        self.current_activity["text"] = "Current Activity display (searching/killing)"
+        self.submit_process_name["command"] = self.onClick_submit_process
 
         # Display stats to the user about how many processes were found that were relevant and how many were killed
-        self.killed_information = tk.Label()        
-        self.killed_information["text"] = "000 / 000 processes killed"
+        self.scan_counter_text = tk.StringVar()
+        self.scan_counter = tk.Label()
+        self.scan_counter["textvariable"] = self.scan_counter_text
 
-    def placeWidgets(self):
+    def place_widgets(self):
         """ Places widgets in order on the GUI window"""
-        self.instruction_label.pack()
+        self.current_action.pack()
         self.process_name_to_kill.pack()
         self.submit_process_name.pack()
-        self.current_activity.pack()
-        self.killed_information.pack()
-    
-    def get_process_to_kill(self):
-        """ Triggered by the 'submit_process_information' button
-            It sets the process name in app/state_info.
-            Triggers the scanner function.
-            While the scanner passes data to the Queue, processes with the name in state will be killed"""
+        self.scan_counter.pack()
 
-        # Gets the process name from the textbox in all lowercase
-        process_name = self.process_name_to_kill.get().lower()
+    def update_widgets(self):
+        # Update current action
+        activity = f"{state.get_current_action()}..."
+        self.current_action_text.set(activity)
 
-        # Sets the name in the application state
-        state.set_name(process_name)
+        # Update process scan counter
+        scan_counter = f"{state.get_processes_scanned_count()} processes scanned"
+        self.scan_counter_text.set(scan_counter)
 
-        # Triggers the scanner function # while loop for killer
+    def force_gui_update(self):
+        """ Triggers a widget update, then forces an update of idle tasks (like a pending widget update);
+            this allows us to tell the user whats happening in the application at any given moment"""
+
+        log.info(f"from [ProcessKillerApp.force_gui_update()]: forcing an update of GUI widgets defined in update_widgets & momentarely pauses processing of other events so the gui widget update may run properly")
+        self.update_widgets()
+        self.master.update_idletasks()
+
+    def input_validation(self, input):
+        """ Checks the value of the passed-in string and returns True or False depending of if the input is valid """
+
+        # Case: user doesnt enter anything, they just submit
+        if len(input) == 0:
+            log.warn(
+                f"from [ProcessKillerApp.input_validation()]: user has given an input with no character's '{input}', further processing of the input has stopped & no programs will be killed")
+            return False
+
+        # If all of the above conditions are false, we know the string is valid
+        log.info(
+            f"from [ProcessKillerApp.inputValidation()]: input {input} is a valid name; we will continue run-time evaluation to kill processes that contain said name")
+        return True
+
+    def start_process_scanner(self):
+        """ Updates state with the current action, forces GUI update, starts scanner(), forces another gui update"""
+
+        log.warn(
+            f"from [ProcessKillerApp.start_process_scanner()]: Starting scanner() and updating the current_action in state")
+        state.set_current_action("Scanning for processes")
+        self.force_gui_update()
         scanner()
+        self.force_gui_update()
+
+    def start_process_killer(self):
+        """ Updates state with the current action, forces GUI update, starts killer(), forces another gui update"""
+
+        log.warn(
+            f"from [ProcessKillerApp.start_process_killer()]: Starting killer() and updating the current_action in state")
+        state.set_current_action("Killing processes")
+        self.force_gui_update()
         killer()
-    
+
+    def onClick_submit_process(self):
+        """ Triggered by the 'submit_process_name' button, this method contains all of the run-time logic for the application"""
+
+        # If the user has already scanned and killed processes
+        if state.get_has_scanned_and_killed() is True:
+            state._reset_state()
+            log.info(
+                f"from [ProcessKillerApp.onClick_submit_process()]: triggering state reset & preforming a callback")
+            self.onClick_submit_process()
+
+        while state.get_has_scanned_and_killed() is False:
+            process_name = self.process_name_to_kill.get().lower()
+
+            # Validate textbox input; if false, BREAK so the user can try again with a diffrent name
+            if self.input_validation(process_name) is False:
+                print("\nInput not valid\n")
+                break
+
+            # Sets the name in the application state
+            state.set_name(process_name)
+            log.critical(
+                f"from [ProcessKillerApp.onClick_submit_process()]: Starting application scripts")
+
+            # starts the scanner method
+            self.start_process_scanner()
+
+            # starts killer method
+            self.start_process_killer()
+
+            # Sets current_action, updates widgets
+            state.set_current_action(
+                "Enter another process or application name")
+            self.force_gui_update()
+
+            # Call set_has_scanned_and_killed(), setting the value to true and ending the loop
+            state.set_has_scanned_and_killed()
+            log.critical(
+                f"from [ProcessKillerApp.onClick_submit_process()]: Finished running application scripts")
+
 
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
+
 
 def img_resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -72,7 +150,8 @@ def img_resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
-    
+
+
 # input()
 # Title, Icon, Window size (Width x Length)
 title = "Process Killer"
