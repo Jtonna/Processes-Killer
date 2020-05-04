@@ -3,16 +3,11 @@
 import sys
 import os
 import tkinter as tk
-import logging
 
 from .app_state import state
 from .scan_processes import scanner
 from .kill_from_queue import killer
 from .logger import log
-
-log.warning("YOU FUCKED UP")
-log.debug("BUG BOI")
-
 
 class ProcessKillerApp(tk.Frame):
     def __init__(self, master=None):
@@ -51,7 +46,7 @@ class ProcessKillerApp(tk.Frame):
         self.scan_counter.pack()
 
     def update_widgets(self):
-        print("Updating Widgets")
+        log.info(f"from [ProcessKillerApp.update_widgets()]: updating the gui's current_action & scan_counter widgets")
 
         # Update current action
         activity = f"{state.get_current_action()}..."
