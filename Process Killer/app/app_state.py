@@ -67,13 +67,25 @@ class AppState:
         """ Returns the total number of processes scanned """
         return self.processes_scanned_count
 
+    def add_to_unprocesses_strings_queue(self, value):
+        """ Using the Queue 'unprocesses_strings_q' we are able to quickly add un-processed strings from the scanner function"""
+        self.unprocessed_strings_q.enqueue(value)
+
+    def len_of_unprocesses_strings_queue(self):
+        """ Allows us to monitor the length of the unprocessed_strings Queue"""
+        return self.unprocessed_strings_q.len()
+
+    def remove_from_unprocesseed_strings_queue(self):
+        """ Removes an unprocessed string queue so that it may be processed and the PID and Process Name can be added to the kill queue"""
+        return self.unprocessed_strings_q.dequeue()
+    
     def add_to_kill_queue(self, value):
-        """ Using the Queue 'q', we are able to easily add a 'bucket' of data to end of the queue """
+        """ Using the Queue 'kill_q', we are able to easily add a 'bucket' of data to end of the queue, we also keep track of how many processes were added to the kill queue """
         self.processes_scanned_count = self.processes_scanned_count+1
         self.kill_q.enqueue(value)
 
     def len_of_kill_queue(self):
-        """ Using the Queue 'q', we can monitor the length of the q; ie how many 'buckets' there are """
+        """ Using the Queue 'kill_q', we can monitor the length of the q; ie how many 'buckets' there are """
         return self.kill_q.len()
 
     def remove_from_kill_queue(self):
@@ -81,10 +93,23 @@ class AppState:
         return self.kill_q.dequeue()
 
     def _reset_state(self):
-        """ This completely wipes and resets the state,
-            this is useful for when the user wants to kill more than one application"""
-        # TODO: Implement _reset_state
-        pass
+        """ This method resets parts of the application state required for
+            killing more than one application"""
+        
+        # Empty out the kill queue
+        while self.len_of_kill_queue() > 0:
+            self.remove_from_queue()
+        
+        # Empty out the unprocesses strings queue
+        while self.len_of_unprocesses_strings_queue() > 0:
+            self.remove_from_unprocesseed_strings_queue()
+        # Reset application name
+        self.application_name = None
+
+        # Reset has_scanned_and_killed()
+        self.has_scanned_and_killed = False
+
+        # Resets 
 
 
 # Creates the state object so it can be accesses from anywhere in the application
