@@ -17,6 +17,7 @@ class ProcessKillerApp(tk.Frame):
         self.create_widgets()
         self.place_widgets()
         self.update_widgets()
+        log.critical(f"from [ProcessKillerApp.__init__]: Application window either created or closed")
 
     def create_widgets(self):
         """ Design's the widgets that will beused in the GUI """
@@ -78,18 +79,17 @@ class ProcessKillerApp(tk.Frame):
     def start_process_scanner(self):
         """ Updates state with the current action, forces GUI update, starts scanner(), forces another gui update"""
 
-        print("setting state and calling scanner")
+        log.warn(f"from [ProcessKillerApp.start_process_scanner()]: Starting scanner() and updating the current_action in state")
         state.set_current_action("Scanning for processes")
         self.force_gui_update()
-        print(state.get_current_action())
         scanner()
         self.force_gui_update()
 
     def start_process_killer(self):
         """ Updates state with the current action, forces GUI update, starts killer(), forces another gui update"""
-        print("setting state and calling killer")
+
+        log.warn(f"from [ProcessKillerApp.start_process_killer()]: Starting killer() and updating the current_action in state")
         state.set_current_action("Killing processes")
-        print(state.get_current_action())
         self.force_gui_update()
         killer()
 
@@ -99,7 +99,7 @@ class ProcessKillerApp(tk.Frame):
         # If the user has already scanned and killed processes
         if state.get_has_scanned_and_killed() is True:
             state._reset_state()
-            print("\nSTATE RESET\n")
+            log.info(f"from [ProcessKillerApp.onClick_submit_process()]: triggering state reset & preforming a callback")
             self.onClick_submit_process()
 
         while state.get_has_scanned_and_killed() is False:
@@ -112,7 +112,7 @@ class ProcessKillerApp(tk.Frame):
 
             # Sets the name in the application state
             state.set_name(process_name)
-            print("starting application scripts")
+            log.critical(f"from [ProcessKillerApp.onClick_submit_process()]: Starting application scripts")
 
             # starts the scanner method
             self.start_process_scanner()
@@ -127,6 +127,7 @@ class ProcessKillerApp(tk.Frame):
 
             # Call set_has_scanned_and_killed(), setting the value to true and ending the loop
             state.set_has_scanned_and_killed()
+            log.critical(f"from [ProcessKillerApp.onClick_submit_process()]: Finished running application scripts")
 
 
 """ Everything below here is for managing the window size, icon, title and the actual window geometry """
