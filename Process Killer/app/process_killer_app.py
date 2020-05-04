@@ -9,6 +9,7 @@ from .scan_processes import scanner
 from .kill_from_queue import killer
 from .logger import log
 
+
 class ProcessKillerApp(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
@@ -46,8 +47,6 @@ class ProcessKillerApp(tk.Frame):
         self.scan_counter.pack()
 
     def update_widgets(self):
-        log.info(f"from [ProcessKillerApp.update_widgets()]: updating the gui's current_action & scan_counter widgets")
-
         # Update current action
         activity = f"{state.get_current_action()}..."
         self.current_action_text.set(activity)
@@ -60,7 +59,7 @@ class ProcessKillerApp(tk.Frame):
         """ Triggers a widget update, then forces an update of idle tasks (like a pending widget update);
             this allows us to tell the user whats happening in the application at any given moment"""
 
-        print("Forced update")
+        log.info(f"from [ProcessKillerApp.force_gui_update()]: forcing an update of GUI widgets defined in update_widgets & momentarely pauses processing of other events so the gui widget update may run properly")
         self.update_widgets()
         self.master.update_idletasks()
 
