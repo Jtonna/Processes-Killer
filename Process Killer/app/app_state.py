@@ -81,6 +81,8 @@ class AppState:
         """ This method resets parts of the application state required for
             killing more than one application"""
 
+        log.warning(f"from [AppState._reset_state()]: application state is being reset to allow for another application name to be processed and killed")
+
         # Empty out the kill queue
         while self.len_of_kill_queue() > 0:
             self.remove_from_kill_queue()
