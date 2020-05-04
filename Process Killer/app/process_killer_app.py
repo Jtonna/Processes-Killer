@@ -1,3 +1,5 @@
+""" Contains the GUI & run-time logic for the application"""
+
 import sys
 import os
 import tkinter as tk
@@ -72,6 +74,23 @@ class ProcessKillerApp(tk.Frame):
         # If all of the above conditions are false, we know the string is valid
         return True
 
+    def start_process_scanner(self):
+        """ Updates state with the current action, forces GUI update, starts scanner(), forces another gui update"""
+
+        print("setting state and calling scanner")
+        state.set_current_action("Scanning for processes")
+        self.force_gui_update()
+        print(state.get_current_action())
+        scanner()
+        self.force_gui_update()
+
+    def start_process_killer(self):
+        """ Updates state with the current action, forces GUI update, starts killer(), forces another gui update"""
+        print("setting state and calling killer")
+        state.set_current_action("Killing processes")
+        print(state.get_current_action())
+        self.force_gui_update()
+        killer()
 
     def onClick_submit_process(self):
         """ Triggered by the 'submit_process_name' button, this method contains all of the run-time logic for the application"""
@@ -83,29 +102,19 @@ class ProcessKillerApp(tk.Frame):
             if self.input_validation(process_name) is False:
                 print("\nInput not valid\n")
                 break
-            
+
             # Sets the name in the application state
             state.set_name(process_name)
             print("starting application scripts")
 
-            # Sets current_action, update's widgets, calls scanner, updates idle tasks
-            print("setting state and calling scanner")
-            state.set_current_action("Scanning for processes")
-            self.force_gui_update()
-            print(state.get_current_action())
-            scanner()
-            self.force_gui_update()
+            # starts the scanner method
+            self.start_process_scanner()
 
-            # Sets current_action, updates widgets, kills applications from queue
-            print("setting state and calling killer")
-            state.set_current_action("Killing processes")
-            print(state.get_current_action())
-            self.force_gui_update()
-            killer()
+            # starts killer method
+            self.start_process_killer()
 
             # Sets current_action, updates widgets
-            state.set_current_action(
-                "Enter another process or application name")
+            state.set_current_action("Enter another process or application name")
             self.force_gui_update()
 
             # Call set_has_scanned_and_killed(), setting the value to true and ending the loop
