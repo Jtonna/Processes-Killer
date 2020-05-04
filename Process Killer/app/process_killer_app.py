@@ -100,7 +100,7 @@ class ProcessKillerApp(tk.Frame):
             state._reset_state()
             print("\nSTATE RESET\n")
             self.onClick_submit_process()
-        
+
         while state.get_has_scanned_and_killed() is False:
             process_name = self.process_name_to_kill.get().lower()
 

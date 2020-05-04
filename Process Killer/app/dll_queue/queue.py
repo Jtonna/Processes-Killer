@@ -2,6 +2,7 @@ from .doubly_linked_list import DoublyLinkedList
 
 #  A queue is first in -> first out.
 
+
 class Queue:
     def __init__(self):
         self.size = 0
