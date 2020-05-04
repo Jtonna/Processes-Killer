@@ -95,6 +95,12 @@ class ProcessKillerApp(tk.Frame):
     def onClick_submit_process(self):
         """ Triggered by the 'submit_process_name' button, this method contains all of the run-time logic for the application"""
 
+        # If the user has already scanned and killed processes
+        if state.get_has_scanned_and_killed() is True:
+            state._reset_state()
+            print("\nSTATE RESET\n")
+            self.onClick_submit_process()
+        
         while state.get_has_scanned_and_killed() is False:
             process_name = self.process_name_to_kill.get().lower()
 
