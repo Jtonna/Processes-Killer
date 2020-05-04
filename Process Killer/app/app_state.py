@@ -78,7 +78,7 @@ class AppState:
     def remove_from_unprocesseed_strings_queue(self):
         """ Removes an unprocessed string queue so that it may be processed and the PID and Process Name can be added to the kill queue"""
         return self.unprocessed_strings_q.dequeue()
-    
+
     def add_to_kill_queue(self, value):
         """ Using the Queue 'kill_q', we are able to easily add a 'bucket' of data to end of the queue, we also keep track of how many processes were added to the kill queue """
         self.processes_scanned_count = self.processes_scanned_count+1
@@ -95,11 +95,11 @@ class AppState:
     def _reset_state(self):
         """ This method resets parts of the application state required for
             killing more than one application"""
-        
+
         # Empty out the kill queue
         while self.len_of_kill_queue() > 0:
             self.remove_from_queue()
-        
+
         # Empty out the unprocesses strings queue
         while self.len_of_unprocesses_strings_queue() > 0:
             self.remove_from_unprocesseed_strings_queue()
