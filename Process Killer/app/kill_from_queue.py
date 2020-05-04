@@ -8,6 +8,7 @@
 import subprocess
 from .app_state import state
 from .scan_processes import scanner
+from .logger import log
 
 
 def killer():
@@ -34,4 +35,4 @@ def killer():
     # If the kill list contains pid's and commands, kill them all at once
     cmd = task_kill_command+pid_string
     subprocess.Popen(cmd, shell=True)
-    print(f"Ran following command in shell:{cmd}")
+    log.warn(f"from [kill_from_queue.killer()]: finished running the following command '{cmd}' ")
