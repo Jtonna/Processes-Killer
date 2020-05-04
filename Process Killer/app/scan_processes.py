@@ -58,7 +58,8 @@ def scanner():
         if name_in_state in lowercase_process_str:
             string_processor(process.decode('utf-8'))
 
-    log.info(f"from [scan_processes.scanner()]: Finished scanning all system processes")
+    log.info(
+        f"from [scan_processes.scanner()]: Finished scanning all system processes")
 
 
 def string_processor(process):
