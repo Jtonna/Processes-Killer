@@ -3,10 +3,15 @@
 import sys
 import os
 import tkinter as tk
+import logging
 
 from .app_state import state
 from .scan_processes import scanner
 from .kill_from_queue import killer
+from .logger import log
+
+log.warning("YOU FUCKED UP")
+log.debug("BUG BOI")
 
 
 class ProcessKillerApp(tk.Frame):
