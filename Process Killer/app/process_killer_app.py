@@ -9,10 +9,14 @@ from .scan_processes import scanner
 from .kill_from_queue import killer
 from .logger import log
 
+background = '#342535'
+foreground = '#99DBF8'
+
 
 class ProcessKillerApp(tk.Frame):
     def __init__(self, master=None):
-        tk.Frame.__init__(self, master)
+        tk.Frame.__init__(self, master, bg=background)
+        master["bg"] = background
         self.pack()
         self.create_widgets()
         self.place_widgets()
@@ -26,10 +30,14 @@ class ProcessKillerApp(tk.Frame):
         # Give the user a status update, by default this instructs the user enter an application name
         self.current_action_text = tk.StringVar()
         self.current_action = tk.Label()
+        self.current_action["bg"] = background
+        self.current_action["fg"] = foreground
         self.current_action["textvariable"] = self.current_action_text
 
         # Input to let the user give us a process name
         self.process_name_to_kill = tk.Entry()
+        self.process_name_to_kill["bg"] = background
+        self.process_name_to_kill["fg"] = foreground
 
         # Button for submitting the process name to be killed
         self.submit_process_name = tk.Button()
@@ -39,6 +47,8 @@ class ProcessKillerApp(tk.Frame):
         # Display stats to the user about how many processes were found that were relevant and how many were killed
         self.scan_counter_text = tk.StringVar()
         self.scan_counter = tk.Label()
+        self.scan_counter["bg"] = background
+        self.scan_counter["fg"] = foreground
         self.scan_counter["textvariable"] = self.scan_counter_text
 
     def place_widgets(self):
@@ -171,6 +181,5 @@ root.resizable(False, False)
 
 # Instansiate the widgets and place them
 app = ProcessKillerApp(master=root)
-
 # Main loop so the app only closes when the user clicks the close button
 app.mainloop()
