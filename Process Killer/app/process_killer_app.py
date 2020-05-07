@@ -9,14 +9,14 @@ from .scan_processes import scanner
 from .kill_from_queue import killer
 from .logger import log
 
-background = '#342535'
-foreground = '#99DBF8'
+background = "#342535"
+foreground = "#99DBF8"
+textboxbg = "#7F5186"
 
 
 class ProcessKillerApp(tk.Frame):
     def __init__(self, master=None):
-        tk.Frame.__init__(self, master, bg=background)
-        master["bg"] = background
+        tk.Frame.__init__(self, master, bg = background)
         self.pack()
         self.create_widgets()
         self.place_widgets()
@@ -178,6 +178,7 @@ root.wm_iconbitmap(icon_path)
 root.title(title)
 root.geometry(window_size)
 root.resizable(False, False)
+root.configure(background=background)
 
 # Instansiate the widgets and place them
 app = ProcessKillerApp(master=root)
