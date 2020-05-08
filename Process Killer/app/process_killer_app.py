@@ -30,6 +30,7 @@ class ProcessKillerApp(tk.Frame):
         # Give the user a status update, by default this instructs the user enter an application name
         self.current_action_text = tk.StringVar()
         self.current_action = tk.Label()
+        self.current_action["font"] = ('', 15)
         self.current_action["bg"] = background
         self.current_action["fg"] = foreground
         self.current_action["textvariable"] = self.current_action_text
